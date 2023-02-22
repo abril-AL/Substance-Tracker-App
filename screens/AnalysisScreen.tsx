@@ -1,11 +1,11 @@
 import { StyleSheet } from 'react-native';
-
 import { Text, View } from '../components/Themed';
+import { RootTabScreenProps } from '../types';
 
-export default function TabTwoScreen() {
+export default function AnalysisScreen({ navigation }: RootTabScreenProps<'Analysis'>) {
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Calendar</Text>
+      <Text style={styles.title}>Analysis</Text>
     </View>
   );
 }

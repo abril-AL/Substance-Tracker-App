@@ -6,6 +6,7 @@ import useColorScheme from './hooks/useColorScheme';
 import Navigation from './navigation';
 
 export default function App() {
+  console.log("boom")
   const isLoadingComplete = useCachedResources();
   const colorScheme = useColorScheme();
 

@@ -16,6 +16,8 @@ import ModalScreen from '../screens/ModalScreen';
 import NotFoundScreen from '../screens/NotFoundScreen';
 import TabOneScreen from '../screens/TabOneScreen';
 import TabTwoScreen from '../screens/TabTwoScreen';
+import SearchScreen from '../screens/SearchScreen';
+import AnalysisScreen from '../screens/AnalysisScreen';
 import { RootStackParamList, RootTabParamList, RootTabScreenProps } from '../types';
 import LinkingConfiguration from './LinkingConfiguration';
 
@@ -63,10 +65,18 @@ function BottomTabNavigator() {
         tabBarActiveTintColor: Colors[colorScheme].tint,
       }}>
       <BottomTab.Screen
+        name="Analysis"
+        component={AnalysisScreen}
+        options={{
+          title: 'Analysis',
+          tabBarIcon: ({ color }) => <TabBarIcon name="code" color={color} />,
+        }}
+      />
+      <BottomTab.Screen
         name="TabOne"
         component={TabOneScreen}
         options={({ navigation }: RootTabScreenProps<'TabOne'>) => ({
-          title: 'Tab One',
+          title: 'Log',
           tabBarIcon: ({ color }) => <TabBarIcon name="code" color={color} />,
           headerRight: () => (
             <Pressable
@@ -88,7 +98,15 @@ function BottomTabNavigator() {
         name="TabTwo"
         component={TabTwoScreen}
         options={{
-          title: 'Tab Two',
+          title: 'Calendar',
+          tabBarIcon: ({ color }) => <TabBarIcon name="code" color={color} />,
+        }}
+      />
+      <BottomTab.Screen
+        name="Search"
+        component={SearchScreen}
+        options={{
+          title: 'Search',
           tabBarIcon: ({ color }) => <TabBarIcon name="code" color={color} />,
         }}
       />
