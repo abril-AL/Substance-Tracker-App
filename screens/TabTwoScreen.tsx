@@ -1,5 +1,5 @@
 import { Alert, StyleSheet } from 'react-native';
-import { Text, View } from 'react-native';
+import { Text, View, ScrollView } from 'react-native';
 //import { SafeAreaView } from 'react-native-safe-area-context';
 import React, { Component, useState, useEffect } from 'react';
 import { Calendar, DateData } from 'react-native-calendars';
@@ -52,7 +52,7 @@ function CAL(CalProps: any) {
         selectedDotColor: 'red',
         indicatorColor: 'blue',
       }}
-      onDayPress={day => { CalProps.setDay(day.dateString), getLogs(day.dateString) }}
+      onDayPress={day => { CalProps.setDay(day.dateString) }}
       minDate='2023-01-01'
       maxDate='2025-01-31'
       hideExtraDays={true}
@@ -69,10 +69,17 @@ function LogDisplay(LogDisplay: any) {
     <View>
       <Text style={styles.log}> Logs For The {getDayString(LogDisplay.day)} </Text>
       <Text style={styles.container}></Text>
-      <Box w={400} h={210} style={styles.logBox} />
+      <Text style={styles.container}></Text>
+      <View style={styles.container}>
+        <ScrollView style={styles.scrollArea}>
+          <Text>
+
+          </Text>
+        </ScrollView>
+      </View>
     </View >
   )
-}
+}//<Box w={400} h={210} style={styles.logBox} />
 
 //helper function to get current day as string, mostly for initializing 'day' in default function
 function helper() {
@@ -100,6 +107,7 @@ function getLogs(day: string) {
   else
     return ("No data for the selected date")
 }
+
 
 //Important, returns the screen :o
 export default FuncScreen;
@@ -135,7 +143,16 @@ const styles = StyleSheet.create({
     borderColor: 'pink',
     marginHorizontal: 6,
     marginVertical: 7,
-  }
+  },
+  scrollArea: {
+    backgroundColor: 'white',
+    minHeight: 210,
+    minWidth: 400,
+    borderWidth: 2,
+    borderColor: 'pink',
+    marginHorizontal: 6,
+    marginVertical: 7,
+  },
 });
 
 
@@ -174,6 +191,7 @@ function getDayString(day: string) {
   return (numberWords[D - 1] + ' of ' + months[M - 1]);
 }
 
+
 /*
 // Modifying an item in March 3rd, 2023
 DATA['2023']['03']['03']['alcohol'] = 5;
@@ -182,7 +200,6 @@ console.log(DATA['2023']['03']['03']); // Output: { 'alcohol': 5, 'Marijuana': 1
 
 /*
 TO DO later
-  - access dictionary 
-  - make it pretty
   - mark days with logs, recall cal documentation 
+  -fix issue where accessing data not yet in data dicitonary causes error
 */
