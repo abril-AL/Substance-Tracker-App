@@ -25,7 +25,6 @@ function FuncScreen() {
       <CAL {...CalProps} ></CAL>
 
       <View style={styles.separator}></View>
-      <View style={styles.separator}></View>
 
       <LogDisplay {...LogProps}></LogDisplay>
     </View>
@@ -70,7 +69,7 @@ function LogDisplay(LogDisplay: any) {
     <View>
       <Text style={styles.log}> Logs For The {getDayString(LogDisplay.day)} </Text>
       <Text style={styles.container}></Text>
-      <Box w={32} h={32} m={4} style={{ backgroundColor: "tomato" }} />
+      <Box w={400} h={210} style={styles.logBox} />
     </View >
   )
 }
@@ -96,7 +95,10 @@ function getLogs(day: string) {
   const M = components[1];
   const D = components[2];
   console.log(DATA[Y][M][D]);
-  return (DATA[Y][M][D]);
+  if (DATA[Y] && DATA[Y][M] && DATA[Y][M][D])
+    return (DATA[Y][M][D]);
+  else
+    return ("No data for the selected date")
 }
 
 //Important, returns the screen :o
@@ -124,7 +126,15 @@ const styles = StyleSheet.create({
   //style for the bottom, mainly just want a smaller font
   log: {
     color: "white",
+    justifyContent: 'center',
     fontSize: 25,
+  },
+  logBox: {
+    backgroundColor: 'white',
+    borderWidth: 2,
+    borderColor: 'pink',
+    marginHorizontal: 6,
+    marginVertical: 7,
   }
 });
 
