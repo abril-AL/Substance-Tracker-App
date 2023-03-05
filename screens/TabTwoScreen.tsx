@@ -4,6 +4,7 @@ import { Text, View } from 'react-native';
 import React, { Component, useState, useEffect } from 'react';
 import { Calendar, DateData } from 'react-native-calendars';
 //import Colors from '../constants/Colors';
+import { Box } from "@react-native-material/core";
 
 //parent function
 function FuncScreen() {
@@ -67,7 +68,9 @@ function LogDisplay(LogDisplay: any) {
   //console.log(DAY);
   return (
     <View>
-      <Text style={styles.log}> Logs for the {getDayString(LogDisplay.day)} </Text>
+      <Text style={styles.log}> Logs For The {getDayString(LogDisplay.day)} </Text>
+      <Text style={styles.container}></Text>
+      <Box w={32} h={32} m={4} style={{ backgroundColor: "tomato" }} />
     </View >
   )
 }
@@ -158,7 +161,7 @@ function getDayString(day: string) {
   const components = day.split('-');
   const M = parseInt(components[1]);
   const D = parseInt(components[2]);
-  return (numberWords[D] + ' of ' + months[M]);
+  return (numberWords[D - 1] + ' of ' + months[M - 1]);
 }
 
 /*
