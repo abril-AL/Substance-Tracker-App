@@ -5,6 +5,7 @@ import React, { Component, useState, useEffect } from 'react';
 import { Calendar, DateData } from 'react-native-calendars';
 //import Colors from '../constants/Colors';
 import { Box } from "@react-native-material/core";
+import Day from 'react-native-calendars/src/calendar/day';
 
 //parent function
 function FuncScreen() {
@@ -62,7 +63,7 @@ function CAL(CalProps: any) {
 }
 //log display child, passed the day value
 function LogDisplay(LogDisplay: any) {
-  const DAY = LogDisplay.day;
+  const DAY = String(LogDisplay.day.dateString);
   //Alert.alert(DAY);
   //console.log(DAY);
   return (
@@ -72,8 +73,8 @@ function LogDisplay(LogDisplay: any) {
       <Text style={styles.container}></Text>
       <View style={styles.container}>
         <ScrollView style={styles.scrollArea}>
-          <Text>
-
+          <Text style={styles.txtBox}>
+            {getLogs(LogDisplay.day)}
           </Text>
         </ScrollView>
       </View>
@@ -97,15 +98,32 @@ function helper() {
 }
 //return the log for the passed day, returns a dictionary of info for that day
 function getLogs(day: string) {
-  const components = day.split('-');
+  const components = (String(day)).split('-');
   const Y = components[0];
   const M = components[1];
   const D = components[2];
-  console.log(DATA[Y][M][D]);
-  if (DATA[Y] && DATA[Y][M] && DATA[Y][M][D])
-    return (DATA[Y][M][D]);
-  else
-    return ("No data for the selected date")
+  if (DATA[Y] && DATA[Y][M] && DATA[Y][M][D]) {
+    //console.log('found: ' + DATA[Y][M][D]);
+    var ret = '  ';
+    const subDict = DATA[Y][M][D];
+    const subKeys = Object.keys(subDict);
+
+    for (let i = 0; i < subKeys.length; i++) {
+      const key = subKeys[i];
+      ret += key;
+      ret += ': ';
+      ret += DATA[Y][M][D][key] + ' ';
+      ret += getUnit(key);
+      ret += '\n  ';
+    }
+    console.log(ret);
+
+    return (ret);
+  }
+  else {
+    console.log('nothing');
+    return ("No data for the selected date");
+  }
 }
 
 
@@ -153,6 +171,11 @@ const styles = StyleSheet.create({
     marginHorizontal: 6,
     marginVertical: 7,
   },
+  txtBox: {
+    color: 'black',
+    fontSize: 20,
+    //fontFamily: 'Serif',
+  }
 });
 
 
@@ -173,9 +196,20 @@ const DATA: Year = {
   '2024': {},
 };
 //dict for units
-const units = {
-  'Marijuana': 'oz', 'Alcohol': 'drinks', 'Xanax': 'mg', 'MDMA': 'mg',
+const units: { [key: string]: string } = {
+  'Marijuana': 'oz',
+  'Alcohol': 'drinks',
+  'Xanax': 'mg',
+  'MDMA': 'mg'
+};
+function getUnit(s: string): string {
+  if (units[s]) {
+    return units[s];
+  } else {
+    return "";
+  }
 }
+
 //day pos
 const numberWords = ['First', 'Second', 'Third', 'Fourth', 'Fifth', 'Sixth', 'Seventh', 'Eighth', 'Ninth', 'Tenth',
   'Eleventh', 'Twelfth', 'Thirteenth', 'Fourteenth', 'Fifteenth', 'Sixteenth', 'Seventeenth', 'Eighteenth', 'Nineteenth',
