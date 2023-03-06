@@ -36,18 +36,18 @@ function CAL(CalProps: any) {
     <Calendar
       style={{
         borderWidth: 2,
-        borderColor: 'pink',
+        borderColor: 'purple',
         height: 360,
         marginLeft: 3,
         marginRight: 3,
       }}
       theme={{
-        selectedDayTextColor: '#ffc0cb',
-        todayTextColor: '#ffc0cb',
-        dayTextColor: '#2d4150',
+        selectedDayTextColor: 'purple',
+        todayTextColor: 'purple',
+        dayTextColor: 'grey',
         textDisabledColor: '#d9e1e8',
         dotColor: '#00adf5',
-        arrowColor: '#ffc0cb',
+        arrowColor: 'purple',
         selectedDotColor: 'red',
         indicatorColor: 'blue',
       }}
@@ -130,17 +130,17 @@ const styles = StyleSheet.create({
   },
   //style im using for the calendar title
   cal: {
-    color: 'white',
+    color: 'grey',
     fontSize: 35,
   },
   //style for the bottom, mainly just want a smaller font
   log: {
-    color: "white",
+    color: "grey",
     justifyContent: 'center',
     fontSize: 25,
   },
   logBox: {
-    backgroundColor: 'white',
+    backgroundColor: 'grey',
     borderWidth: 2,
     borderColor: 'pink',
     marginHorizontal: 6,
@@ -151,13 +151,13 @@ const styles = StyleSheet.create({
     minHeight: 210,
     minWidth: 400,
     borderWidth: 2,
-    borderColor: 'pink',
+    borderColor: 'purple',
     marginHorizontal: 6,
     marginVertical: 7,
   },
   txtBox: {
     marginTop: 2,
-    color: 'black',
+    color: 'grey',
     fontSize: 20,
     //fontFamily: 'Serif',
   }
