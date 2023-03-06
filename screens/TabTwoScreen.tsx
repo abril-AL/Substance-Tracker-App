@@ -68,7 +68,7 @@ function LogDisplay(LogDisplay: any) {
   //console.log(DAY);
   return (
     <View>
-      <Text style={styles.log}> Logs For The {getDayString(LogDisplay.day)} </Text>
+      <Text style={styles.log}> Logs For {getDayString(LogDisplay.day)} </Text>
       <Text style={styles.container}></Text>
       <Text style={styles.container}></Text>
       <View style={styles.container}>
@@ -172,6 +172,7 @@ const styles = StyleSheet.create({
     marginVertical: 7,
   },
   txtBox: {
+    marginTop: 2,
     color: 'black',
     fontSize: 20,
     //fontFamily: 'Serif',
@@ -211,10 +212,38 @@ function getUnit(s: string): string {
 }
 
 //day pos
-const numberWords = ['First', 'Second', 'Third', 'Fourth', 'Fifth', 'Sixth', 'Seventh', 'Eighth', 'Ninth', 'Tenth',
-  'Eleventh', 'Twelfth', 'Thirteenth', 'Fourteenth', 'Fifteenth', 'Sixteenth', 'Seventeenth', 'Eighteenth', 'Nineteenth',
-  'Twentieth', 'Twenty-first', 'Twenty-second', 'Twenty-third', 'Twenty-fourth', 'Twenty-fifth', 'Twenty-sixth',
-  'Twenty-seventh', 'Twenty-eighth', 'Twenty-ninth', 'Thirtieth', 'Thirty-first'
+const numberWords = [
+  "1st",
+  "2nd",
+  "3rd",
+  "4th",
+  "5th",
+  "6th",
+  "7th",
+  "8th",
+  "9th",
+  "10th",
+  "11th",
+  "12th",
+  "13th",
+  "14th",
+  "15th",
+  "16th",
+  "17th",
+  "18th",
+  "19th",
+  "20th",
+  "21st",
+  "22nd",
+  "23rd",
+  "24th",
+  "25th",
+  "26th",
+  "27th",
+  "28th",
+  "29th",
+  "30th",
+  "31st"
 ];
 const months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
 function getDayString(day: string) {
@@ -222,7 +251,7 @@ function getDayString(day: string) {
   const components = day.split('-');
   const M = parseInt(components[1]);
   const D = parseInt(components[2]);
-  return (numberWords[D - 1] + ' of ' + months[M - 1]);
+  return (months[M - 1] + ' ' + numberWords[D - 1]);
 }
 
 
