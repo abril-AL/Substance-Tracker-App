@@ -7,6 +7,7 @@ import {
   TextInput,
 } from "@react-native-material/core";
 import { useState } from "react";
+import { readData, writeData } from "../screens/firebase";
 
 export function TrackButton({
   substance,
@@ -23,26 +24,28 @@ export function TrackButton({
     if (count >= step) {
       setCount(count - step);
     }
+    console.log(readData("/Alcohol"));
+    writeData("/Alcohol", "2");
   }
 
   return (
-    <Flex inline={true} justify="start" self="start" >
-        <Spacer/>
-        <Text variant="h6">{substance}</Text>
-        <Spacer/>
-        <Button
-          title="+"
-          variant="outlined"
-          onPress={() => setCount(count + step)}
-        />
-        <Spacer/>
-        {/* <TextInput variant="outlined" label="" input="number"/> */}
-        <Text>
-          {count.toFixed(1)} {unit}
-        </Text>
-        <Spacer/>
-        <Button title="-" variant="outlined" onPress={() => minus()} />
-        <Spacer/>
+    <Flex inline={true} justify="start" self="start">
+      <Spacer />
+      <Text variant="h6">{substance}</Text>
+      <Spacer />
+      <Button
+        title="+"
+        variant="outlined"
+        onPress={() => setCount(count + step)}
+      />
+      <Spacer />
+      {/* <TextInput variant="outlined" label="" input="number"/> */}
+      <Text>
+        {count.toFixed(1)} {unit}
+      </Text>
+      <Spacer />
+      <Button title="-" variant="outlined" onPress={() => minus()} />
+      <Spacer />
     </Flex>
   );
 }
