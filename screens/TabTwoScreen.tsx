@@ -172,7 +172,10 @@ const DATA: Year = {
   '2023': {
     '01': { '05': { 'MDMA': 2 }, '06': { 'Alcohol': 12 } },
     '02': {},
-    '03': { '01': { 'Marijuana': 1 }, '02': { 'Marijuana': 2 }, '03': { 'Alcohol': 4, 'Marijuana': 1 }, '04': { 'Alcohol': 4, 'Xanax': 1 }, '05': { 'MDMA': 2 }, '06': { 'Alcohol': 12 } },
+    '03': {
+      '01': { 'Marijuana': 1 }, '02': { 'Marijuana': 2 }, '03': { 'Alcohol': 4, 'Marijuana': 1 },
+      '04': { 'Alcohol': 4, 'Xanax': 1 }, '05': { 'MDMA': 2 }, '06': { 'Alcohol': 12 }
+    },
     '04': {},
     '05': {},
   },
@@ -210,6 +213,8 @@ function getDayString(day: string) {
 
 /*
 TO DO later
-  - mark days with logs, recall cal documentation 
-  - change getLogs function when we set up firebase
+  - mark days with logs, recall cal documentation
   */
+
+//stuff for when i get firebase connection:
+//need to got to date given -> iterate over all logs for that day -> add up a total, 
