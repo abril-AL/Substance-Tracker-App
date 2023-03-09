@@ -3,6 +3,7 @@ import { View } from "../components/Themed";
 import { Stack, Button } from "@react-native-material/core";
 import { RootTabScreenProps } from "../types";
 import { TrackButton } from "../components/TrackButton";
+import { readData } from "./firebase";
 
 export default function TrackScreen({
   navigation,
@@ -25,7 +26,7 @@ export default function TrackScreen({
 }
 
 // const onSubmit = handleSubmit((input) => {
-  
+
 // })
 
 const styles = StyleSheet.create({
