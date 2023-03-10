@@ -10,19 +10,48 @@
 - Our goal is to provide a simple way for users to track their intake of varying substances
 - We prioritized an easy to use application that neither shames users for their intake, nor ecourages their intake
 - We used React Native as the framework of our application in order to run it on ios devices\
-- Our backend is built from firebase with a simple tree that 
+- Our backend is uses firebase framework with a simple tree that maps users to a timestamped calendar tree of substance logs
 
 ## Installation
 - To install the app, follow these commands
+
+- First clone the source code from our github repository
 ```
-TODO: installation cmds, need to figure out this method
+git clone git@github.com:katirp/35L-TrackerApp.git
+```
+- Then move into the directory with:
+```
+cd 35L-TrackerApp
 ```
 
 ## Running the program
 - To run the program, follow these commands
+
+- Make sure you have Node.js installed
+    - [or download here](https://nodejs.org/en/download/)
+- Next, you will need to have expo-cli installed 
+- To install expo-cli:
 ```
-TODO: running commands, windows=expo go + qr code
+npm install expo-cli
 ```
+- or for yarn installation:
+```
+yarn add expo-cli
+```
+- Finally, the app can be ran by the following command:
+```
+npx expo start
+```
+- Troubleshotting
+    - This command should work on a windows 10 machine
+    - Mac or Linux might require `sudo`, so try `sudo npx expo start`
+
+- If on windows, to open the app on ios, you will be presented with qr code
+    - make sure you have Expo Go downloaded from the app store
+    - scan the rq code in the terminal
+    - click the link and allow the js to download
+
+- TODO: add mac instructions, emulator, etc
 
 ## Using the application
 - The user will first be presented with an authentification screen 
@@ -34,7 +63,7 @@ TODO: running commands, windows=expo go + qr code
         - There are total 18 substances for the user to choose from
         - Users can log more than one substance taken in a singlee log instance
     - Analysis
-        - TODO: explain the purpose of this page
+        - TODO: explain the purpose of this page lul
     - Calendar
         - The calendar page allows users to check the total substance logs for any given day
         - Upon the user selecting a day from the calendar component, the box at the bottom of the screen will display the sum of each substance taken that day
