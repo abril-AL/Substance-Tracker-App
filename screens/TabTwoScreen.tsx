@@ -36,18 +36,18 @@ function CAL(CalProps: any) {
     <Calendar
       style={{
         borderWidth: 2,
-        borderColor: 'pink',
+        borderColor: 'purple',
         height: 360,
         marginLeft: 3,
         marginRight: 3,
       }}
       theme={{
-        selectedDayTextColor: '#ffc0cb',
-        todayTextColor: '#ffc0cb',
-        dayTextColor: '#2d4150',
+        selectedDayTextColor: 'purple',
+        todayTextColor: 'purple',
+        dayTextColor: 'grey',
         textDisabledColor: '#d9e1e8',
         dotColor: '#00adf5',
-        arrowColor: '#ffc0cb',
+        arrowColor: 'purple',
         selectedDotColor: 'red',
         indicatorColor: 'blue',
       }}
@@ -130,17 +130,17 @@ const styles = StyleSheet.create({
   },
   //style im using for the calendar title
   cal: {
-    color: 'white',
+    color: 'grey',
     fontSize: 35,
   },
   //style for the bottom, mainly just want a smaller font
   log: {
-    color: "white",
+    color: "grey",
     justifyContent: 'center',
     fontSize: 25,
   },
   logBox: {
-    backgroundColor: 'white',
+    backgroundColor: 'grey',
     borderWidth: 2,
     borderColor: 'pink',
     marginHorizontal: 6,
@@ -151,13 +151,13 @@ const styles = StyleSheet.create({
     minHeight: 210,
     minWidth: 400,
     borderWidth: 2,
-    borderColor: 'pink',
+    borderColor: 'purple',
     marginHorizontal: 6,
     marginVertical: 7,
   },
   txtBox: {
     marginTop: 2,
-    color: 'black',
+    color: 'grey',
     fontSize: 20,
     //fontFamily: 'Serif',
   }
@@ -172,7 +172,10 @@ const DATA: Year = {
   '2023': {
     '01': { '05': { 'MDMA': 2 }, '06': { 'Alcohol': 12 } },
     '02': {},
-    '03': { '01': { 'Marijuana': 1 }, '02': { 'Marijuana': 2 }, '03': { 'Alcohol': 4, 'Marijuana': 1 }, '04': { 'Alcohol': 4, 'Xanax': 1 }, '05': { 'MDMA': 2 }, '06': { 'Alcohol': 12 } },
+    '03': {
+      '01': { 'Marijuana': 1 }, '02': { 'Marijuana': 2 }, '03': { 'Alcohol': 4, 'Marijuana': 1 },
+      '04': { 'Alcohol': 4, 'Xanax': 1 }, '05': { 'MDMA': 2 }, '06': { 'Alcohol': 12 }
+    },
     '04': {},
     '05': {},
   },
@@ -210,6 +213,8 @@ function getDayString(day: string) {
 
 /*
 TO DO later
-  - mark days with logs, recall cal documentation 
-  - change getLogs function when we set up firebase
+  - mark days with logs, recall cal documentation
   */
+
+//stuff for when i get firebase connection:
+//need to got to date given -> iterate over all logs for that day -> add up a total, 
