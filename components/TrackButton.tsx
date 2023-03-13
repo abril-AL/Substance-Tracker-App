@@ -1,31 +1,22 @@
-import {
-  Stack,
-  Text,
-  Button,
-  Flex,
-  Spacer,
-  TextInput,
-} from "@react-native-material/core";
-import { useState } from "react";
-import { readData, writeData } from "../screens/firebase";
+import { Text, Button, Flex, Spacer } from "@react-native-material/core";
 
 export function TrackButton({
   substance,
   unit,
   step,
+  getValue,
+  setValue,
 }: {
   substance: string;
   unit: string;
   step: number;
+  getValue: number;
+  setValue: Function;
 }) {
-  const [count, setCount] = useState(0);
-
   function minus() {
-    if (count >= step) {
-      setCount(count - step);
+    if (getValue >= step) {
+      setValue(-step);
     }
-    console.log(readData("/Alcohol"));
-    writeData("/Alcohol", "2");
   }
 
   return (
@@ -33,15 +24,10 @@ export function TrackButton({
       <Spacer />
       <Text variant="h6">{substance}</Text>
       <Spacer />
-      <Button
-        title="+"
-        variant="outlined"
-        onPress={() => setCount(count + step)}
-      />
+      <Button title="+" variant="outlined" onPress={() => setValue(step)} />
       <Spacer />
-      {/* <TextInput variant="outlined" label="" input="number"/> */}
       <Text>
-        {count.toFixed(1)} {unit}
+        {getValue.toFixed(2)} {unit}
       </Text>
       <Spacer />
       <Button title="-" variant="outlined" onPress={() => minus()} />
