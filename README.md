@@ -50,6 +50,7 @@ npx expo start
     - make sure you have Expo Go downloaded from the app store
     - scan the rq code in the terminal
     - click the link and allow the js to download
+    - also note that the app is built for lightmode on ios
 
 - TODO: add mac instructions, emulator, etc
 

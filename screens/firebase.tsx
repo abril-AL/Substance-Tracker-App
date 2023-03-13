@@ -13,13 +13,14 @@ const firebaseConfig = {
 };
 
 // Initialize Firebase
-const app = initializeApp(firebaseConfig);
+export const app = initializeApp(firebaseConfig);
 
 // Initialize Realtime Database and get a reference to the service
-const database = getDatabase(app);
+export const database = getDatabase(app);
 
 //function to read firebase data
 //ex: const a = readData('/user1')
+
 export async function readData(table: string) {
   const data = ref(database, table);
   try {
@@ -40,4 +41,23 @@ export async function readData(table: string) {
 // ex: writeData('/user1/2023/03/08/02:15:18/Alcohol', 2)
 export function writeData(table: string, key_data: Object) {
   set(ref(database, table), key_data);
+}
+
+// Abrils function
+//specific to calender - gets string rep of JSON database
+export async function calReadData(table: string) {
+  const data = ref(database, table);
+  //console.log(table)
+  try {
+    const snapshot = await get(data);
+    if (snapshot.exists()) {
+      return await Promise.resolve(JSON.stringify(snapshot.val()));
+      return JSON.stringify(snapshot.val());
+    } else {
+      console.log("No data available");
+    }
+  } catch (error) {
+    console.error(error);
+  }
+  return "Error Acessing Database";
 }
