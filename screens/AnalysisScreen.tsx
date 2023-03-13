@@ -8,95 +8,199 @@ import {
 } from "react-native";
 import { RootTabScreenProps } from "../types";
 import React, { useState, useEffect } from "react";
+import moment from 'moment';
+import {Checkingalc, styles2} from "../components/checks"
 
-const formatNumber = (number) => `0${number}`.slice(-2);
+const allDrugList = new Map();
 
-const getRemaining = (time) => {
-  const hours = Math.floor(time/3600);
-  const mins = Math.floor((time - hours * 3600)/ 60);
-  const secs = time - mins * 60;
-  return { hours: formatNumber(hours), mins: formatNumber(mins), secs: formatNumber(secs) };
-};
+const Alc = new Map();
+Alc.set("timespan", 1);
+Alc.set("quantity", 1);
+Alc.set("time", "2023-03-13T11:43:50");
 
-export default function SearchScreen({
-  navigation,
-}: RootTabScreenProps<"Search">) {
-  const [remainingSecs, setRemainingSecs] = useState(3600);
-  const [isActive, setIsActive] = useState(false);
-  const { hours, mins, secs } = getRemaining(remainingSecs);
+const Weed = new Map();
+Weed.set("timespan", 3);
+Weed.set("quantity", 1);
+Weed.set("time", "2023-03-13T11:43:50");
 
-  const toggle = () => {
-    setIsActive(!isActive);
-  };
+const LSD = new Map();
+LSD.set("timespan", 12);
+LSD.set("quantity", 0);
+LSD.set("time", "2023-03-13T11:43:50");
 
-  const reset = () => {
-    setRemainingSecs(3600);
-    setIsActive(false);
-  };
+const Shrooms = new Map();
+Shrooms.set("timespan", 6);
+Shrooms.set("quantity", 0);
+Shrooms.set("time", "2023-03-13T11:43:50");
 
-  useEffect(() => {
-    let interval = null;
-    if (isActive && remainingSecs !==0) {
-      interval = setInterval(() => {
-        setRemainingSecs((remainingSecs) => remainingSecs - 1);
-      }, 1000);
-    } else if (!isActive && remainingSecs !== 0) {
-      clearInterval(interval);
-    }
+const antidepressants = new Map();
+antidepressants.set("timespan", 24);
+antidepressants.set("quantity", 0);
+antidepressants.set("time", "2023-03-13T11:43:50");
 
-    return () => clearInterval(interval);
-  }, [isActive, remainingSecs]);
+const anxietyMedications = new Map();
+anxietyMedications.set("timespan", 24);
+anxietyMedications.set("quantity", 0);
+anxietyMedications.set("time", "2023-03-13T11:43:50");
 
-  return (
-    <View style={styles.container}>
-      <StatusBar style="light-content" />
-      <Text style={styles.drugText}>Alcohol</Text>
-      <Text style={styles.timerText}>{`${hours}:${mins}:${secs}`}</Text>
-      <TouchableOpacity onPress={toggle} style={styles.button}>
-        <Text style={styles.buttonText}>{isActive ? "Pause" : "Start"}</Text>
-      </TouchableOpacity>
-      <TouchableOpacity onPress={reset} style={styles.button}>
-        <Text style={styles.buttonText}>Reset</Text>
-      </TouchableOpacity>
-    </View>
-  );
+const benzos = new Map();
+benzos.set("timespan", 2);
+benzos.set("quantity", 0);
+benzos.set("time", "2023-03-13T11:43:50");
+
+const coke = new Map();
+coke.set("timespan", 0.25);
+coke.set("quantity", 0);
+coke.set("time", "2023-03-08 08:38:00");
+
+const heroine = new Map();
+heroine.set("timespan", 0.5);
+heroine.set("quantity", 0);
+heroine.set("time", "2023-03-13T11:43:50");
+
+const ketamine = new Map();
+ketamine.set("timespan", 0.5);
+ketamine.set("quantity", 0);
+ketamine.set("time", "2023-03-13T11:43:50");
+
+const kratom = new Map();
+kratom.set("timespan", 3);
+kratom.set("quantity",  0);
+kratom.set("time", "2023-03-13T11:43:50");
+
+const molly = new Map();
+molly.set("timespan", 6);
+molly.set("quantity" , 0);
+molly.set("time", "2023-03-13T11:43:50");
+
+const crystalMeth = new Map();
+crystalMeth.set("timespan", 8);
+crystalMeth.set("quantity" , 0);
+crystalMeth.set("time", "2023-03-13T11:43:50");
+
+const painReli = new Map();
+painReli.set("timespan", 5);
+painReli.set("quantity", 0);
+painReli.set("time", "2023-03-13T11:43:50");
+
+const perccs = new Map();
+perccs.set("timespan", 5);
+perccs.set("quantity", 0);
+perccs.set("time", "2023-03-13T11:43:50");
+
+const anabolicSteriods = new Map();
+anabolicSteriods.set("timespan", 5);
+anabolicSteriods.set("quantity", 0);
+anabolicSteriods.set("time", "2023-03-13T11:43:50");
+
+const nic = new Map();
+nic.set("timespan", 0.5);
+nic.set("quantity", 0);
+nic.set("time", "2023-03-13T11:43:50");
+
+
+allDrugList.set('Alcohol', Alc);
+allDrugList.set('Marijuana', Weed);
+allDrugList.set('LSD', LSD);
+allDrugList.set('Shrooms', Shrooms);
+allDrugList.set('Antidepressants', antidepressants);
+allDrugList.set('Anxiety Medications', anxietyMedications);
+allDrugList.set('Benzos', benzos);
+allDrugList.set('Cocaine', coke);
+allDrugList.set('Heroine', heroine);
+allDrugList.set('Ketamine', ketamine);
+allDrugList.set('Kratom', kratom);
+allDrugList.set('Molly', molly);
+allDrugList.set('Crystal Meth', crystalMeth);
+allDrugList.set('Pain Relievers', painReli);
+allDrugList.set('Percocets', perccs);
+allDrugList.set('Anabolic Steriods', anabolicSteriods);
+allDrugList.set('Nicotine', nic);
+
+
+
+
+export function TimingCheck({
+  endTime, 
+  currTime
+ }: {
+    endTime: string;
+    currTime: string;
+ }) {
+
+
+
+return (
+  moment(endTime).isAfter(currTime)
+  
+);
 }
 
-const styles = StyleSheet.create({
+export function QuanCheck({
+  num, 
+ }: {
+    num: number;
+ }) {
+
+
+
+return (
+  (num > 0)
+  
+);
+}
+
+
+
+export default function SearchScreen({ navigation }: RootTabScreenProps<"Search">) {
+  for (const [outerKey, outerValue] of allDrugList) {
+    for (const [innerKey, innerValue] of outerValue) {
+      var endT = (allDrugList.get(`${outerKey}`).get("time"));
+      var startdate = moment(endT);
+      var span = (allDrugList.get(`${outerKey}`).get("timespan"));
+      var endT2 = moment(startdate).add(span, 'hours').format();
+      var dispT = moment(startdate).add(span, 'hours').format('LT');
+      var curT = moment().format('LTS');
+    return(
+      <View style={styless.container}>
+      {(allDrugList.get(`${outerKey}`).get("quantity")) > 0 && moment(`${endT2}`).isAfter(`${moment().format()}`, 'seconds') ? 
+      <Text style = {styless.alc}>{`${dispT} ${outerKey}`}</Text>: null }
+      </View>
+    );
+      
+    }
+  }
+}
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+const styless = StyleSheet.create({
   container: {
     flex: 1,
-    alignItems: "center",
-    justifyContent: "center",
+    justifyContent: "space-evenly",
   },
-  button: {
-    borderWidth: 10,
-    borderColor: "black",
-    allignItems: "center",
-    width: 150,
-    height: 150,
-    borderRadius: 150,
-    alignItems: "center",
-    justifyContent: "center",
-  },
-  buttonText: {
-    fontSize: 25,
-    fontWeight: "bold",
-    alignItems: "center",
-    justifyContent: "center",
-  },
-  separator: {
-    marginVertical: 30,
-    height: 1,
-    width: "80%",
-  },
-  timerText: {
+  alc: {
+    fontSize: 40,
     color: "black",
-    fontSize: 90,
-    marginBottom: 20,
+    textAlign: "center",
   },
-  drugText: {
-    color : 'black',
-    fontSize: 50,
-    marginBottom: 10,
+  time: {
+    fontSize: 35,
+    color: "black",
+    textAlign: "right",
   },
+
+
 });
