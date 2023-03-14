@@ -1,19 +1,30 @@
-import { Alert, StyleSheet } from 'react-native';
-import { Text, View, ScrollView } from 'react-native';
-import React, { Component, useState, useEffect } from 'react';
-import { Calendar, DateData } from 'react-native-calendars';
-import { Box } from "@react-native-material/core";
+import { StyleSheet } from 'react-native';
+import { Text, View, ScrollView, Button } from 'react-native';
+import React, { useState } from 'react';
+import { Calendar } from 'react-native-calendars';
 import Day from 'react-native-calendars/src/calendar/day';
 
+import { calReadData } from './firebase'
+
+//TODO: import a unique id from authentification - this way it only pulls their data
+const userid = 'user1';
+var calDatabase = {};
+
 //parent function
-function FuncScreen() {
-  //State - selected day / currently viewing logs of, today by default
+export default function FuncScreen() {
   const [day, setDay] = useState(String(helper()));
 
-  //Props
-  //Calender will setDay based on clicked day
+
+  var sessionDB = '';
+  //TODO: read from uniqu user id
+  calReadData('/user1').then((value) => {
+    sessionDB = value;
+    var obj = (JSON.parse(sessionDB));
+    sessionDB = obj;
+    calDatabase = sessionDB;
+  });
+
   const CalProps = { setDay };
-  //log section will read the currently selected day
   const LogProps = { day };
 
   return (
@@ -30,7 +41,6 @@ function FuncScreen() {
   );
 }
 
-//calendar child, passed the setDay function 
 function CAL(CalProps: any) {
   return (
     <Calendar
@@ -59,9 +69,8 @@ function CAL(CalProps: any) {
     ></Calendar>
   )
 }
-//log display child, passed the day value
+
 function LogDisplay(LogDisplay: any) {
-  const DAY = String(LogDisplay.day.dateString);
   return (
     <View>
       <Text style={styles.log}> Logs For {getDayString(LogDisplay.day)} </Text>
@@ -70,14 +79,14 @@ function LogDisplay(LogDisplay: any) {
       <View style={styles.container}>
         <ScrollView style={styles.scrollArea}>
           <Text style={styles.txtBox}>
-            {getLogs(LogDisplay.day)}
+            {getLogsv2(LogDisplay.day, calDatabase)}
           </Text>
         </ScrollView>
       </View>
     </View >
-  )
+  );
 }
-//helper function to get current day as string, mostly for initializing 'day' in default function
+
 function helper() {
   var date = new Date().getDate();
   var month = new Date().getMonth() + 1;
@@ -90,20 +99,83 @@ function helper() {
     addZeroMonth = '0';
   return (year + '-' + addZeroMonth + month + '-' + addzeroDate + date);
 }
-//return the log for the passed day, returns a dictionary of info for that day
-function getLogs(day: string) {
-  const components = (String(day)).split('-');
-  const Y = components[0];
-  const M = components[1];
-  const D = components[2];
-  if (DATA[Y] && DATA[Y][M] && DATA[Y][M][D]) {
-    var ret = '  ';
-    const subDict = DATA[Y][M][D];
-    const subKeys = Object.keys(subDict);
+const units: { [key: string]: string } = {
+  'Cannabis': 'g',
+  'Alcohol': 'drinks',
+  'Xanax': 'g',
+  'MDMA': 'g',
+  'Nicotine': 'g',
+  'Psilocybin': 'g'
 
+};
+function getUnit(s: string): string {
+  if (units[s]) {
+    return units[s];
+  } else {
+    return '';
+  }
+}
+const numberWords = [
+  "1st", "2nd", "3rd", "4th", "5th", "6th", "7th", "8th", "9th", "10th", "11th", "12th", "13th", "14th", "15th", "16th",
+  "17th", "18th", "19th", "20th", "21st", "22nd", "23rd", "24th", "25th", "26th", "27th", "28th", "29th", "30th", "31st"
+];
+const months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+function getDayString(day: string) {
+  //YYYY-MM-DD
+  const components = day.split('-');
+  const M = parseInt(components[1]);
+  const D = parseInt(components[2]);
+  return (months[M - 1] + ' ' + numberWords[D - 1]);
+}
+
+function getLogsv2(date: string, db: any) {
+  var dayslogs = getDaysLogs(date, calDatabase);
+  const totals = addSubstances(dayslogs);
+  const ret = getSumStr(totals);
+  //TODO: add units, can do later
+  return ret;
+}
+
+//these are all the helper functions for getLogsv2 - v2 just uses the firebase data entries instead of dummy data
+function getDaysLogs(dateString: string, dict_obj: Record<string, any>) {
+  const dateArray = dateString.split('-');
+  let level: Record<string, any> = dict_obj;
+
+  for (let i = 0; i < dateArray.length; i++) {
+    const key = dateArray[i];
+    if (level.hasOwnProperty(key)) {
+      level = level[key];
+    } else {
+      return {};
+    }
+  }
+  return level;
+}
+function addSubstances(dict: Record<string, Record<string, string>>) {
+  const totals: Record<string, number> = {};
+  if (dict == null) {
+    return {};
+  }
+  for (const time of Object.keys(dict)) {
+    const substances = dict[time];
+
+    for (const [substance, amount] of Object.entries(substances)) {
+      if (totals[substance] === undefined) {
+        totals[substance] = Number(amount);
+      } else {
+        totals[substance] += Number(amount);
+      }
+    }
+  }
+  return totals;
+}
+function getSumStr(sub_dict: any) {
+  if (sub_dict != null) {
+    var ret = ' ';
+    const subKeys = Object.keys(sub_dict);
     for (let i = 0; i < subKeys.length; i++) {
       const key = subKeys[i];
-      ret += key + ': ' + DATA[Y][M][D][key] + ' ' + getUnit(key) + '\n  ';
+      ret += key + ': ' + sub_dict[key] + '\n';
     }
     return (ret);
   }
@@ -111,9 +183,6 @@ function getLogs(day: string) {
     return ("No data for the selected date");
   }
 }
-//Important, returns the screen 
-export default FuncScreen;
-
 const styles = StyleSheet.create({
   container: {
     flex: 1,
@@ -163,17 +232,42 @@ const styles = StyleSheet.create({
   }
 });
 
-// Dummy data set since no backend yet - year->month->day->substances
-type Substance = Record<string, number>;
-type Day = Record<string, Substance>;
-type Month = Record<string, Day>;
-type Year = Record<string, Month>;
+//////old stuff - keeping for reference
+
+//{getLogs(LogDisplay.day)}
+//<Button title='testdb' onPress={() => { console.log(getLogsv2('2023-03-08', calDatabase)) }}></Button>
+
+//old function for getting fake data
+function getLogs(day: string) {
+
+  const components = (String(day)).split('-');
+  const Y = components[0];
+  const M = components[1];
+  const D = components[2];
+  if (DATA[Y] && DATA[Y][M] && DATA[Y][M][D]) {
+    var ret = '  ';
+    const subDict = DATA[Y][M][D];
+    const subKeys = Object.keys(subDict);
+
+    for (let i = 0; i < subKeys.length; i++) {
+      const key = subKeys[i];
+      ret += key + ': ' + DATA[Y][M][D][key] + ' ' + getUnit(key) + '\n  ';
+    }
+    return (ret);
+  }
+  else {
+    return ("No data for the selected date");
+  }
+}
+// Dummy data set for testing display - year->month->day->substances
+type Substance = Record<string, number>; type Day = Record<string, Substance>;
+type Month = Record<string, Day>; type Year = Record<string, Month>;
 const DATA: Year = {
   '2023': {
     '01': { '05': { 'MDMA': 2 }, '06': { 'Alcohol': 12 } },
     '02': {},
     '03': {
-      '01': { 'Marijuana': 1 }, '02': { 'Marijuana': 2 }, '03': { 'Alcohol': 4, 'Marijuana': 1 },
+      '01': { 'Cannabis': 1 }, '02': { 'Cannabis': 2 }, '03': { 'Alcohol': 4, 'Cannabis': 1 },
       '04': { 'Alcohol': 4, 'Xanax': 1 }, '05': { 'MDMA': 2 }, '06': { 'Alcohol': 12 }
     },
     '04': {},
@@ -182,39 +276,21 @@ const DATA: Year = {
   '2024': {},
 };
 
-//dict for units - can later update/add more
-const units: { [key: string]: string } = {
-  'Marijuana': 'oz',
-  'Alcohol': 'drinks',
-  'Xanax': 'mg',
-  'MDMA': 'mg'
-};
-function getUnit(s: string): string {
-  if (units[s]) {
-    return units[s];
-  } else {
-    return '';
-  }
+//i just never ended up using these 2 functions
+function getDatRef(s: string) {
+  const components = s.split('-');
+  const Y = components[0];
+  const M = components[1];
+  const D = components[2];
+  return '/' + Y + '/' + M + '/' + D;
 }
-
-//day pos
-const numberWords = [
-  "1st", "2nd", "3rd", "4th", "5th", "6th", "7th", "8th", "9th", "10th", "11th", "12th", "13th", "14th", "15th", "16th",
-  "17th", "18th", "19th", "20th", "21st", "22nd", "23rd", "24th", "25th", "26th", "27th", "28th", "29th", "30th", "31st"
-];
-const months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
-function getDayString(day: string) {
-  //YYYY-MM-DD
-  const components = day.split('-');
-  const M = parseInt(components[1]);
-  const D = parseInt(components[2]);
-  return (months[M - 1] + ' ' + numberWords[D - 1]);
+function fixJSON(str: string) {
+  // Remove any backslashes
+  str = str.replace(/\\/g, '');
+  // Remove quotes around property names
+  str = str.replace(/"([^"]+)":/g, '$1:');
+  // Replace single quotes with double quotes
+  str = str.replace(/'/g, '"');
+  // Parse the string as JSON
+  return JSON.parse(str);//recall alter: go to ['_z']
 }
-
-/*
-TO DO later
-  - mark days with logs, recall cal documentation
-  */
-
-//stuff for when i get firebase connection:
-//need to got to date given -> iterate over all logs for that day -> add up a total, 
