@@ -30,14 +30,14 @@ const url =["https://www.cdc.gov/alcohol/fact-sheets.htm",
         "https://nida.nih.gov/research-topics/commonly-used-drugs-charts#tobacco" ]
 
 // definition of the Item, which will be rendered in the FlatList
-const Item = ({ name, details, id, link}) => (
+const Item = ({ name, details, id}) => (
   <><View style={styles.item}>
     <Text style={styles.title}>{name}</Text>
     <Text style={styles.details}>{details}</Text>
     <Text style={styles.details}>{id}</Text>
     <Button
       title= "Safety Info"
-      color="blue"
+      color="#92EBE9"
       onPress={() => WebBrowser.openBrowserAsync(url[id-1])} />
   </View>
 </>
@@ -88,12 +88,16 @@ const styles = StyleSheet.create({
   item: {
     margin: 30,
     borderBottomWidth: 2,
-    borderBottomColor: "lightgrey"
+    borderBottomColor: "#d9dbda"
   },
   title: {
+    color: "violet",
     fontSize: 20,
     fontWeight: "bold",
     marginBottom: 5,
     fontStyle: "italic",
   },
+  details: {
+    color: "white",
+  }
 });

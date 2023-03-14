@@ -32,7 +32,9 @@ const SearchScreen = ({ navigation }: RootTabScreenProps<'Search'>) =>{
   return (
 
     <SafeAreaView style={styles.root}>
-      {!clicked && <Text style={styles.title}>Substances</Text>}
+      {!clicked && <Text style={[styles.title,styles.setColor]}>
+      
+      </Text>}
       <SearchBar
         searchPhrase={searchPhrase}
         setSearchPhrase={setSearchPhrase}
@@ -57,6 +59,7 @@ const styles = StyleSheet.create({
   root: {
     justifyContent: "center",
     alignItems: "center",
+    backgroundColor: "#180E3E"
   },
   title: {
     width: "100%",
@@ -64,6 +67,9 @@ const styles = StyleSheet.create({
     fontSize: 25,
     fontWeight: "bold",
     marginLeft: "10%",
+  },
+  setColor:{
+    color:"violet"
   },
 });
 
