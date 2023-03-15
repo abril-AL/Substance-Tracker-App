@@ -1,4 +1,4 @@
-import { getExistingUsers } from './firebase'
+import { getExistingUsers, addUser } from './firebase'
 import 'firebase/auth'
 import { Button, Text } from '@react-native-material/core'
 import { StyleSheet } from 'react-native';
@@ -15,11 +15,11 @@ getExistingUsers().then((value) => {
 
 export function AuthScreen(authProps: any) {
     const [signingIn, setSI] = useState(true);
-    const [uninput, setUN] = useState('');
-    const [pwinput, setPW] = useState('');
-    const [errorMsg, setErrorMsg] = useState('');
-    const alias = authProps.setAuth;
     if (signingIn) {
+        const [uninput, setUN] = useState('');
+        const [pwinput, setPW] = useState('');
+        const [errorMsg, setErrorMsg] = useState('');
+        const alias = authProps.setAuth;
         return (
             <SafeAreaProvider>
                 <Text style={styles.separator} />
@@ -46,6 +46,10 @@ export function AuthScreen(authProps: any) {
         )
     }
     else {
+        const [uninput, setUN] = useState('');
+        const [pwinput, setPW] = useState('');
+        const [errorMsg, setErrorMsg] = useState('');
+        const alias = authProps.setAuth;
         return (
             <SafeAreaProvider>
                 <Text style={styles.separator} />
@@ -53,14 +57,16 @@ export function AuthScreen(authProps: any) {
                 <Stack spacing={2} style={{ margin: 16 }}>
                     <Text>Username</Text>
                     <TextInput
+                        onChangeText={(text) => setUN(text)}
                         leading={props => <Icon name="account" {...props} />}
                     />
                     <Text>Password</Text>
                     <TextInput
+                        onChangeText={(text) => setPW(text)}
                         variant="outlined"
                     />
                 </Stack>
-                <Button title="Sign Up" style={styles.buttonRight}></Button>
+                <Button title="Sign Up" style={styles.buttonRight} onPress={() => { alias(authSignUp(uninput, pwinput, setErrorMsg)) }}></Button>
                 <Text style={styles.errmsg}>{errorMsg}</Text>
                 <Text style={styles.separator} />
                 <Text style={styles.switch}>Already Have An Account?</Text>
@@ -129,4 +135,23 @@ function acctExists(un: string) {
 }
 function pwmatch(un: string, pw: string) {
     return (meta[un] == pw);
+}
+
+function authSignUp(un: string, pw: string, err: React.Dispatch<React.SetStateAction<string>>) {
+    if (un == '' || pw == '') {
+        err('Please Enter a Valid Username and Password')
+        return false;
+    }
+    if (acctExists(un)) {
+        err('This username is already in use');
+        return false;
+    }
+    else {
+        setM(un);
+        console.log('ehrm');
+        addUser(un, pw);
+        return false;
+    }
+    err('wut the... how ??');
+    return false;
 }

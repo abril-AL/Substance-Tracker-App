@@ -76,3 +76,13 @@ export async function getExistingUsers() {
   }
   return "Error Acessing Database";
 }
+
+import { update } from "firebase/database";
+
+export async function addUser(un: string, pw: string) {
+  const db = getDatabase(app);
+  const obj: Record<string, string> = {};
+  obj[un] = pw;
+  //console.log(obj);
+  update(ref(db, '/Users'), obj);
+}

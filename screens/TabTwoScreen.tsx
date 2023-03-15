@@ -15,14 +15,11 @@ export default function FuncScreen() {
   const [day, setDay] = useState(String(helper()));
   const userref = '/' + MASTERID + '/';
 
-  var test = '';
   var sessionDB = '';
-  //TODO: read from unique user id
-  var times = 15;//for some reason it needs to try to retrieve a few times, safer to do it
-  for (var i = 0; i < times; i++) {
+  //for some reason it needs to try to retrieve a few times, more reliable this way
+  for (var i = 0; i < 15; i++) {
     calReadData(userref).then((value) => {
       sessionDB = value;
-      test = value;
       var obj = (JSON.parse(sessionDB));
       sessionDB = obj;
       calDatabase = sessionDB;
@@ -36,7 +33,7 @@ export default function FuncScreen() {
   return (
     <View>
       <View style={styles.separator}></View>
-      <Button title='test' onPress={() => console.log(calDatabase)}></Button>
+      <Button title='test' ></Button>
 
       <Text style={styles.cal}>Calendar</Text>
       <CAL {...CalProps} ></CAL>
@@ -151,6 +148,8 @@ function getLogsv2(date: string, db: any) {
   const ret = getSumStr(totals);
   //TODO: add units, can do later
   console.log(ret);
+  if (ret == '')
+    return ("No data for the selected date");
   return ret;
 }
 
