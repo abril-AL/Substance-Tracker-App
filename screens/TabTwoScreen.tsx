@@ -6,21 +6,29 @@ import Day from 'react-native-calendars/src/calendar/day';
 import { calReadData } from './firebase'
 
 //TODO: import a unique id from authentification - this way it only pulls their data
-const userid = 'user1';
+import { MASTERID } from '../constants/userInfo';
+//const userref = '/' + MASTERID + '/';
 var calDatabase = {};
 
 //parent function
 export default function FuncScreen() {
   const [day, setDay] = useState(String(helper()));
+  const userref = '/' + MASTERID + '/';
 
+  var test = '';
   var sessionDB = '';
-  //TODO: read from uniqu user id
-  calReadData('/user1').then((value) => {
-    sessionDB = value;
-    var obj = (JSON.parse(sessionDB));
-    sessionDB = obj;
-    calDatabase = sessionDB;
-  });
+  //TODO: read from unique user id
+  var times = 15;//for some reason it needs to try to retrieve a few times, safer to do it
+  for (var i = 0; i < times; i++) {
+    calReadData(userref).then((value) => {
+      sessionDB = value;
+      test = value;
+      var obj = (JSON.parse(sessionDB));
+      sessionDB = obj;
+      calDatabase = sessionDB;
+    });
+  }
+  console.log(sessionDB);
 
   const CalProps = { setDay };
   const LogProps = { day };
@@ -28,7 +36,7 @@ export default function FuncScreen() {
   return (
     <View>
       <View style={styles.separator}></View>
-      <Button title='test' ></Button>
+      <Button title='test' onPress={() => console.log(calDatabase)}></Button>
 
       <Text style={styles.cal}>Calendar</Text>
       <CAL {...CalProps} ></CAL>
@@ -90,22 +98,32 @@ function helper() {
   var date = new Date().getDate();
   var month = new Date().getMonth() + 1;
   var year = new Date().getFullYear();
+  console.log(date);
   var addzeroDate = '';
   if (date < 10)
     addzeroDate = '0';
   var addZeroMonth = '';
   if (month < 10)
     addZeroMonth = '0';
+  //console.log(year + '-' + addZeroMonth + month + '-' + addzeroDate + date);
   return (year + '-' + addZeroMonth + month + '-' + addzeroDate + date);
 }
 const units: { [key: string]: string } = {
+  'Alcohol': 'oz',
+  'Adderal': 'mg',
+  'Benzos': 'mg',
   'Cannabis': 'g',
-  'Alcohol': 'drinks',
-  'Xanax': 'g',
-  'MDMA': 'g',
+  'Cocaine': 'mg',
+  'Ketamine': 'mg',
+  'Kratom': 'g',
+  'LSD': 'mcg',
+  'MDMA': 'mg',
+  'Meth': 'mg',
   'Nicotine': 'g',
-  'Psilocybin': 'g'
-
+  'Ibuprofen': 'g',
+  'Percocet': 'mg',
+  'Psilocybin': 'g',
+  'Steroid (Anabolic': 'mg',
 };
 function getUnit(s: string): string {
   if (units[s]) {
@@ -132,6 +150,7 @@ function getLogsv2(date: string, db: any) {
   const totals = addSubstances(dayslogs);
   const ret = getSumStr(totals);
   //TODO: add units, can do later
+  console.log(ret);
   return ret;
 }
 
@@ -170,11 +189,11 @@ function addSubstances(dict: Record<string, Record<string, string>>) {
 }
 function getSumStr(sub_dict: any) {
   if (sub_dict != null) {
-    var ret = ' ';
+    var ret = '';
     const subKeys = Object.keys(sub_dict);
     for (let i = 0; i < subKeys.length; i++) {
       const key = subKeys[i];
-      ret += key + ': ' + sub_dict[key] + '\n';
+      ret += '  ' + key + ': ' + sub_dict[key] + '\n';
     }
     return (ret);
   }

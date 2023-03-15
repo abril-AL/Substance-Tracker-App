@@ -45,9 +45,9 @@ export function writeData(table: string, key_data: Object) {
 
 // Abrils function
 //specific to calender - gets string rep of JSON database
-export async function calReadData(table: string) {
-  const data = ref(database, table);
-  //console.log(table)
+export async function calReadData(userRef: string) {
+  const data = ref(database, userRef);
+  console.log(userRef)
   try {
     const snapshot = await get(data);
     if (snapshot.exists()) {
