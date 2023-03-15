@@ -45,9 +45,9 @@ export function writeData(table: string, key_data: Object) {
 
 // Abrils function
 //specific to calender - gets string rep of JSON database
-export async function calReadData(table: string) {
-  const data = ref(database, table);
-  //console.log(table)
+export async function calReadData(userRef: string) {
+  const data = ref(database, userRef);
+  console.log(userRef)
   try {
     const snapshot = await get(data);
     if (snapshot.exists()) {
@@ -60,4 +60,29 @@ export async function calReadData(table: string) {
     console.error(error);
   }
   return "Error Acessing Database";
+}
+
+export async function getExistingUsers() {
+  try {
+    const snapshot = await get(ref(database, '/Users'));
+    if (snapshot.exists()) {
+      return await Promise.resolve(JSON.stringify(snapshot.val()));
+      return JSON.stringify(snapshot.val());
+    } else {
+      console.log("No data available");
+    }
+  } catch (error) {
+    console.error(error);
+  }
+  return "Error Acessing Database";
+}
+
+import { update } from "firebase/database";
+
+export async function addUser(un: string, pw: string) {
+  const db = getDatabase(app);
+  const obj: Record<string, string> = {};
+  obj[un] = pw;
+  //console.log(obj);
+  update(ref(db, '/Users'), obj);
 }
