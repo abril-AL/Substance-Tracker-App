@@ -197,21 +197,23 @@ export default function TrackScreen({
   function submitData() {
     for (const item in data) {
       if (data[item].Count.toFixed(2) != "0.00") {
+        //Abrils note for Kati: need to add something like '/user' as well to make it user specific
+        // import {MASTERID} from '../constants/userInfo'; should give access to the userID from signing in :D
         let today = new Date();
         writeData(
           today.getFullYear() +
-            "/" +
-            (today.getMonth() + 1) +
-            "/" +
-            today.getDate() +
-            "/" +
-            today.getHours() +
-            ":" +
-            today.getMinutes() +
-            ":" +
-            today.getSeconds() +
-            "/" +
-            data[item].Name,
+          "/" +
+          (today.getMonth() + 1) +
+          "/" +
+          today.getDate() +
+          "/" +
+          today.getHours() +
+          ":" +
+          today.getMinutes() +
+          ":" +
+          today.getSeconds() +
+          "/" +
+          data[item].Name,
           Math.round(data[item].Count * 10) / 10
         );
         data[item].SetCount(-data[item].Count);

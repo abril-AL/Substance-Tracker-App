@@ -3,7 +3,6 @@ import { Text, View, ScrollView, Button } from 'react-native';
 import React, { useState } from 'react';
 import { Calendar } from 'react-native-calendars';
 import Day from 'react-native-calendars/src/calendar/day';
-
 import { calReadData } from './firebase'
 
 //TODO: import a unique id from authentification - this way it only pulls their data
@@ -13,7 +12,6 @@ var calDatabase = {};
 //parent function
 export default function FuncScreen() {
   const [day, setDay] = useState(String(helper()));
-
 
   var sessionDB = '';
   //TODO: read from uniqu user id
@@ -30,6 +28,7 @@ export default function FuncScreen() {
   return (
     <View>
       <View style={styles.separator}></View>
+      <Button title='test' ></Button>
 
       <Text style={styles.cal}>Calendar</Text>
       <CAL {...CalProps} ></CAL>

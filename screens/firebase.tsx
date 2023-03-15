@@ -61,3 +61,18 @@ export async function calReadData(table: string) {
   }
   return "Error Acessing Database";
 }
+
+export async function getExistingUsers() {
+  try {
+    const snapshot = await get(ref(database, '/Users'));
+    if (snapshot.exists()) {
+      return await Promise.resolve(JSON.stringify(snapshot.val()));
+      return JSON.stringify(snapshot.val());
+    } else {
+      console.log("No data available");
+    }
+  } catch (error) {
+    console.error(error);
+  }
+  return "Error Acessing Database";
+}
