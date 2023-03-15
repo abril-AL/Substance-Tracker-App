@@ -202,18 +202,18 @@ export default function TrackScreen({
         let today = new Date();
         writeData(
           today.getFullYear() +
-          "/" +
-          (today.getMonth() + 1) +
-          "/" +
-          today.getDate() +
-          "/" +
-          today.getHours() +
-          ":" +
-          today.getMinutes() +
-          ":" +
-          today.getSeconds() +
-          "/" +
-          data[item].Name,
+            "/" +
+            (today.getMonth() + 1) +
+            "/" +
+            today.getDate() +
+            "/" +
+            today.getHours() +
+            ":" +
+            today.getMinutes() +
+            ":" +
+            today.getSeconds() +
+            "/" +
+            data[item].Name,
           Math.round(data[item].Count * 10) / 10
         );
         data[item].SetCount(-data[item].Count);

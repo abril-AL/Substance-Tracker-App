@@ -17,7 +17,7 @@ const SearchBar = ({clicked, searchPhrase, setSearchPhrase, setClicked}) => {
         <Feather
           name="search"
           size={20}
-          color="black"
+          color="#180E3E"
           style={{ marginLeft: 1 }}
         />
         {/* Input field */}
@@ -32,7 +32,7 @@ const SearchBar = ({clicked, searchPhrase, setSearchPhrase, setClicked}) => {
         />
         {/* cross Icon, depending on whether the search bar is clicked or not */}
         {clicked && (
-          <Entypo name="cross" size={20} color="black" style={{ padding: 1 }} onPress={() => {
+          <Entypo name="cross" size={20} color="#587B7F" style={{ padding: 1 }} onPress={() => {
               setSearchPhrase("")
           }}/>
         )}
@@ -42,6 +42,7 @@ const SearchBar = ({clicked, searchPhrase, setSearchPhrase, setClicked}) => {
         <View>
           <Button
             title="Cancel"
+            color = "#92EBE9"
             onPress={() => {
               Keyboard.dismiss();
               setClicked(false);
