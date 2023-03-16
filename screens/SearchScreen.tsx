@@ -21,7 +21,7 @@ const SearchScreen = ({ navigation }: RootTabScreenProps<'Search'>) =>{
    useEffect(() => {
     const getData = async () => {
       const apiResponse = await fetch(
-        "https://my-json-server.typicode.com/ssethu1886/SearchBarTutorial/substances"
+        "https://cs35l-tracker-app-default-rtdb.firebaseio.com/search"
       );
       const data = await apiResponse.json();
       setFakeData(data);
