@@ -5,24 +5,7 @@ import { Stack, Button } from "@react-native-material/core";
 import { RootTabScreenProps } from "../types";
 import { TrackButton } from "../components/TrackButton";
 import { writeData } from "./firebase";
-
-// const { control, handleSubmit } = useForm<SubstanceLog>({
-//   defaultValues: {
-//       numInDrive: '',
-//       needPresentation: '',
-//       needFlyers: '',
-//       numFlyers: '',
-//       approved: false
-//   }
-// })
-
-// const onSubmit = handleSubmit((input) => {
-
-// })
-
-const value = (arg: any) => {
-  console.log("accessing child state from parent callback: ", arg);
-};
+import { MASTERID } from "../constants/userInfo";
 
 export default function TrackScreen({
   navigation,
@@ -43,6 +26,7 @@ export default function TrackScreen({
   const [psilocybinCount, setPsilocybinCount] = useState(0);
   const [steroidCount, setSteroidCount] = useState(0);
 
+  // define array that contains information for each substamce
   const data = [
     {
       Name: "Alcohol",
@@ -194,17 +178,30 @@ export default function TrackScreen({
     );
   }
 
+  // when submit button is pressed this function is called, which writes the count of each drug to the database (if
+  // it is greater than 0) at the time of the button press, then resets each count to 0.
   function submitData() {
     for (const item in data) {
       if (data[item].Count.toFixed(2) != "0.00") {
-        //Abrils note for Kati: need to add something like '/user' as well to make it user specific
-        // import {MASTERID} from '../constants/userInfo'; should give access to the userID from signing in :D
         let today = new Date();
+        // write an extra zero if the day/month < 10 so that the data is always 2 digits long (01 instead of 1)
+        let add_zero_month = "";
+        let add_zero_day = "";
+        if (today.getMonth() + 1 < 10) {
+          add_zero_month = "0";
+        }
+        if (today.getDate() < 10) {
+          add_zero_day = "0";
+        }
         writeData(
-          today.getFullYear() +
+          MASTERID +
             "/" +
+            today.getFullYear() +
+            "/" +
+            add_zero_month +
             (today.getMonth() + 1) +
             "/" +
+            add_zero_day +
             today.getDate() +
             "/" +
             today.getHours() +
