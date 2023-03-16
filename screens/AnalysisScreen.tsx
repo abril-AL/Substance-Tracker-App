@@ -16,12 +16,12 @@ const allDrugList = new Map();
 const Alc = new Map();
 Alc.set("timespan", 1);
 Alc.set("quantity", 1);
-Alc.set("time", "2023-03-13T11:43:50");
+Alc.set("time", "2023-03-15T20:43:50");
 
 const Weed = new Map();
 Weed.set("timespan", 3);
 Weed.set("quantity", 1);
-Weed.set("time", "2023-03-13T11:43:50");
+Weed.set("time", "2023-03-15T20:43:50");
 
 const LSD = new Map();
 LSD.set("timespan", 12);
@@ -151,55 +151,64 @@ return (
 }
 
 
-
 export default function SearchScreen({ navigation }: RootTabScreenProps<"Search">) {
+  let myArray: string[] = [];
   for (const [outerKey, outerValue] of allDrugList) {
-    for (const [innerKey, innerValue] of outerValue) {
       var endT = (allDrugList.get(`${outerKey}`).get("time"));
       var startdate = moment(endT);
       var span = (allDrugList.get(`${outerKey}`).get("timespan"));
       var endT2 = moment(startdate).add(span, 'hours').format();
       var dispT = moment(startdate).add(span, 'hours').format('LT');
       var curT = moment().format('LTS');
-    return(
-      <View style={styless.container}>
-      {(allDrugList.get(`${outerKey}`).get("quantity")) > 0 && moment(`${endT2}`).isAfter(`${moment().format()}`, 'seconds') ? 
-      <Text style = {styless.alc}>{`${dispT} ${outerKey}`}</Text>: null }
-      </View>
-    );
-      
-    }
+      if ((allDrugList.get(`${outerKey}`).get("quantity")) > 0)
+      {
+        if (moment(`${endT2}`).isAfter(`${moment().format()}`, 'seconds'))
+        myArray.push(`${outerKey}`);
+        myArray.push(`${dispT}`);
+
+      }
+
   }
+  return(
+    <View style={styless.container}>
+    <Text style = {styless.title}>{"Current Substances"}</Text>
+    {myArray.map((item, index) => (
+        <Text key={index} style={index % 2 === 0 ? styless.alc : styless.time}>
+        {item}
+      </Text>
+      ))}
+    </View>
+  );
 }
-
-  
-
-
-
-
-
-
-
-
-
-
-
-
 
 const styless = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: "space-evenly",
+    backgroundColor: "black",
   },
   alc: {
-    fontSize: 40,
-    color: "black",
-    textAlign: "center",
+    fontSize: 35,
+    color: "white",
+    textAlign: "left",
+    fontFamily: 'Helvetica Neue',
+
+    justifyContent: "space-evenly",
+    marginTop: 30,
   },
   time: {
-    fontSize: 35,
-    color: "black",
+    fontSize: 30,
+    color: "white",
     textAlign: "right",
+  },
+  title: {
+    fontSize: 35,
+    fontWeight: "bold",
+    color: "white",
+    textAlign: "left",
+    marginTop: 30,
+    borderBottomWidth: 1,
+    borderBottomColor: 'white',
+    height: 50,
   },
 
 
