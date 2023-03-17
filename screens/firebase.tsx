@@ -86,3 +86,34 @@ export async function addUser(un: string, pw: string) {
   //console.log(obj);
   update(ref(db, '/Users'), obj);
 }
+
+
+import { MASTERID } from "../constants/userInfo";
+const test = grabCurDay();
+
+
+
+export async function grabCurDay() {
+  let today = new Date();
+  var date = today.getDate();
+  var month = today.getMonth() + 1;
+  var year = today.getFullYear();
+  var addzeroDate = '';
+  if (date < 10)
+    addzeroDate = '0';
+  var addZeroMonth = '';
+  if (month < 10)
+    addZeroMonth = '0';
+  const d_ref = ('/' + year + '/' + addZeroMonth + month + '/' + addzeroDate + date);
+  const snapshot = await get(ref(database, '/' + MASTERID + d_ref));
+  if (snapshot.exists()) {
+    for (var i = 0; i < 15; i++) {
+      const ret = await Promise.resolve(JSON.stringify(snapshot.val()));
+      console.log(ret);
+      return ret;
+    }
+  } else {
+    console.log("No data available");
+    return null;
+  }
+}
