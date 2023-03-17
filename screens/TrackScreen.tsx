@@ -4,9 +4,9 @@ import { View } from "../components/Themed";
 import { Stack, Button } from "@react-native-material/core";
 import { RootTabScreenProps } from "../types";
 import { TrackButton } from "../components/TrackButton";
-import { writeData } from "./firebase";
+import { grabCurDay, writeData } from "./firebase";
 import { MASTERID } from "../constants/userInfo";
-
+import { Alert } from 'react-native'
 export default function TrackScreen({
   navigation,
 }: RootTabScreenProps<"Track">) {
@@ -195,22 +195,22 @@ export default function TrackScreen({
         }
         writeData(
           MASTERID +
-            "/" +
-            today.getFullYear() +
-            "/" +
-            add_zero_month +
-            (today.getMonth() + 1) +
-            "/" +
-            add_zero_day +
-            today.getDate() +
-            "/" +
-            today.getHours() +
-            ":" +
-            today.getMinutes() +
-            ":" +
-            today.getSeconds() +
-            "/" +
-            data[item].Name,
+          "/" +
+          today.getFullYear() +
+          "/" +
+          add_zero_month +
+          (today.getMonth() + 1) +
+          "/" +
+          add_zero_day +
+          today.getDate() +
+          "/" +
+          today.getHours() +
+          ":" +
+          today.getMinutes() +
+          ":" +
+          today.getSeconds() +
+          "/" +
+          data[item].Name,
           Math.round(data[item].Count * 10) / 10
         );
         data[item].SetCount(-data[item].Count);
@@ -223,6 +223,7 @@ export default function TrackScreen({
       <Stack fill center spacing={5} direction="column">
         <ScrollView style={styles.scrollArea}>{trackButtons}</ScrollView>
         <Button
+          color="#92EBE9"
           title="submit"
           style={{ alignSelf: "flex-end", margin: 30 }}
           onPress={() => {
@@ -236,6 +237,7 @@ export default function TrackScreen({
 
 const styles = StyleSheet.create({
   container: {
+    backgroundColor: "#180E3E",
     flex: 1,
     alignItems: "center",
     justifyContent: "center",
@@ -250,7 +252,7 @@ const styles = StyleSheet.create({
     width: "80%",
   },
   scrollArea: {
-    backgroundColor: "white",
+    backgroundColor: "#180E3E",
     minHeight: 210,
     minWidth: 400,
     borderWidth: 2,
@@ -259,3 +261,5 @@ const styles = StyleSheet.create({
     marginVertical: 7,
   },
 });
+
+

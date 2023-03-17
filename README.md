@@ -1,5 +1,6 @@
 # CS 35L Winter 23 Project
-### Team Karmacoma
+
+## Team Karmacoma
 - Our Team Members
     - Kati Rady Pentek
     - Rama Das
@@ -52,19 +53,27 @@ npx expo start
     - click the link and allow the js to download
     - also note that the app is built for lightmode on ios
 
-- TODO: add mac instructions, emulator, etc
+- If on Mac, 
+    - make sure you have Xcode installed 
+    - set your desired device as the default emulator 
+    - after running 'npm start' in the terminal, press 'i' to run the app on the emulator on your local device.
+    - Expo Go can also be used 
 
 ## Using the application
-- The user will first be presented with an authentification screen 
-- TODO: steps on what to do at this screen
-
+- The user will first be presented with an authentification screen, there is the option to sign up with a new account, or sign into an existing account
+    - Sign Up
+        - To Sign Up, simply press the sign up button and type a unique username and password, if the username is already in use it will prompt for a different name, upon successful sign up the user will then see the rest of the app
+    - Sign In
+        - To sign in, simply input the username ans password that were created previously, is either are wrong it will prompt for the user to try again. Upon successful sign in, the user will see the rest of the app
+        
 - At the bottom off the screen there will be a bar to switch betweent the 4 main pages
     - Log
         - This page allows users to log the substances they took and send it to the database
         - There are total 18 substances for the user to choose from
-        - Users can log more than one substance taken in a singlee log instance
+        - Users can log more than one substance taken in a single log instance
     - Analysis
-        - TODO: explain the purpose of this page lul
+        - The analysis page allows users to see the most current log time for each substance
+        - For example, if in a day, there were two logs of Benzos, the most recent time will be displayed
     - Calendar
         - The calendar page allows users to check the total substance logs for any given day
         - Upon the user selecting a day from the calendar component, the box at the bottom of the screen will display the sum of each substance taken that day
@@ -73,6 +82,9 @@ npx expo start
         - The search page allows users to find more information about the substances 
         - This includes other names or brands, for example antidepressants include Lexapro and Prozac, or LSD is also called acid
         - Each substance also has a link for additional safety information via a link to the National Institute on Drug Abuse website, which lists possible health effects and treatment options
+        
+- More features
+    - On the calendar page, there is a button at the top that allows users to check if any of their sustance intakes for the current day are above the reccomemded safe amount. This feature is implemented by reading the logs of the current day from firebase, summing them, and comparing it to a threshold.
 
 ## Credits
 - Our master repository can be found here on [GitHub](https://github.com/katirp/35L-TrackerApp)

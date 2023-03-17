@@ -1,4 +1,6 @@
 import { Text, Button, Flex, Spacer } from "@react-native-material/core";
+import React from "react";
+import { StyleSheet, View} from "react-native";
 
 export function TrackButton({
   substance,
@@ -20,18 +22,30 @@ export function TrackButton({
   }
 
   return (
-    <Flex inline={true} justify="start" self="start">
+<Flex inline={true} justify="start" self="start">
       <Spacer />
-      <Text variant="h6">{substance}</Text>
+      <Text variant="h6" style={styles.substance}>{substance}
+       </Text>
       <Spacer />
-      <Button title="+" variant="outlined" onPress={() => setValue(step)} />
+      <Button title="+" variant="outlined" color="#92EBE9" onPress={() => setValue(step)} />
       <Spacer />
-      <Text>
+      <Text style={styles.unit}>
         {getValue.toFixed(2)} {unit}
       </Text>
       <Spacer />
-      <Button title="-" variant="outlined" onPress={() => minus()} />
+      <Button title="-" variant="outlined" color="#92EBE9" onPress={() => minus()} />
       <Spacer />
     </Flex>
+
   );
 }
+
+const styles = StyleSheet.create({
+  substance: {
+    color: "violet",
+  },
+
+  unit: {
+    color: "white",
+  },
+});
