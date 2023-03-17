@@ -1,9 +1,13 @@
 import { StyleSheet } from 'react-native';
-import { Text, View, ScrollView } from 'react-native';
+import { Text, View, ScrollView, Button } from 'react-native';
 import React, { useState } from 'react';
 import { Calendar } from 'react-native-calendars';
+import Day from 'react-native-calendars/src/calendar/day';
 import { calReadData } from './firebase'
+
+//TODO: import a unique id from authentification - this way it only pulls their data
 import { MASTERID } from '../constants/userInfo';
+//const userref = '/' + MASTERID + '/';
 var calDatabase = {};
 
 //parent function
@@ -11,20 +15,25 @@ export default function FuncScreen() {
   const [day, setDay] = useState(String(helper()));
   const userref = '/' + MASTERID + '/';
 
-  var sessionDB = '';//string representation of DB
+  var sessionDB = '';
   //for some reason it needs to try to retrieve a few times, more reliable this way
   for (var i = 0; i < 15; i++) {
     calReadData(userref).then((value) => {
       sessionDB = value;
       var obj = (JSON.parse(sessionDB));
-      calDatabase = obj;
+      sessionDB = obj;
+      calDatabase = sessionDB;
     });
   }
+  console.log(sessionDB);
+
   const CalProps = { setDay };
   const LogProps = { day };
+
   return (
-    <View style={styles.bck}>
+    <View>
       <View style={styles.separator}></View>
+      <Button title='test' ></Button>
 
       <Text style={styles.cal}>Calendar</Text>
       <CAL {...CalProps} ></CAL>
@@ -78,7 +87,6 @@ function LogDisplay(LogDisplay: any) {
           </Text>
         </ScrollView>
       </View>
-      <View style={styles.container} />
     </View >
   );
 }
@@ -87,12 +95,14 @@ function helper() {
   var date = new Date().getDate();
   var month = new Date().getMonth() + 1;
   var year = new Date().getFullYear();
+  console.log(date);
   var addzeroDate = '';
   if (date < 10)
     addzeroDate = '0';
   var addZeroMonth = '';
   if (month < 10)
     addZeroMonth = '0';
+  //console.log(year + '-' + addZeroMonth + month + '-' + addzeroDate + date);
   return (year + '-' + addZeroMonth + month + '-' + addzeroDate + date);
 }
 const units: { [key: string]: string } = {
@@ -125,6 +135,7 @@ const numberWords = [
 ];
 const months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
 function getDayString(day: string) {
+  //YYYY-MM-DD
   const components = day.split('-');
   const M = parseInt(components[1]);
   const D = parseInt(components[2]);
@@ -135,6 +146,7 @@ function getLogsv2(date: string, db: any) {
   var dayslogs = getDaysLogs(date, calDatabase);
   const totals = addSubstances(dayslogs);
   const ret = getSumStr(totals);
+  //TODO: add units, can do later
   console.log(ret);
   if (ret == '')
     return ("No data for the selected date");
@@ -142,7 +154,7 @@ function getLogsv2(date: string, db: any) {
 }
 
 //these are all the helper functions for getLogsv2 - v2 just uses the firebase data entries instead of dummy data
-function getDaysLogs(dateString: string, dict_obj: Record<string, any>) {
+export function getDaysLogs(dateString: string, dict_obj: Record<string, any>) {
   const dateArray = dateString.split('-');
   let level: Record<string, any> = dict_obj;
 
@@ -156,7 +168,7 @@ function getDaysLogs(dateString: string, dict_obj: Record<string, any>) {
   }
   return level;
 }
-function addSubstances(dict: Record<string, Record<string, string>>) {
+export function addSubstances(dict: Record<string, Record<string, string>>) {
   const totals: Record<string, number> = {};
   if (dict == null) {
     return {};
@@ -180,8 +192,7 @@ function getSumStr(sub_dict: any) {
     const subKeys = Object.keys(sub_dict);
     for (let i = 0; i < subKeys.length; i++) {
       const key = subKeys[i];
-      const unit = getUnit(key);
-      ret += '  ' + key + ': ' + sub_dict[key] + ' ' + unit + '\n';
+      ret += '  ' + key + ': ' + sub_dict[key] + '\n';
     }
     return (ret);
   }
@@ -191,35 +202,31 @@ function getSumStr(sub_dict: any) {
 }
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: "#180E3E",
+    flex: 1,
   },
   title: {
-    backgroundColor: "#180E3E",
-    color: 'violet',
+    color: 'white',
     fontSize: 35,
     position: 'absolute',
   },
   separator: {
-    backgroundColor: "#180E3E",
     marginVertical: 10,
     height: 1,
     width: '80%',
   },
   //style im using for the calendar title
   cal: {
-    fontWeight: "bold",
-    color: 'violet',
+    color: 'grey',
     fontSize: 35,
   },
   //style for the bottom, mainly just want a smaller font
   log: {
-    color: "violet",
-    fontWeight: "bold",
+    color: "grey",
     justifyContent: 'center',
     fontSize: 25,
   },
   logBox: {
-    backgroundColor: "#180E3E",
+    backgroundColor: 'grey',
     borderWidth: 2,
     borderColor: 'pink',
     marginHorizontal: 6,
@@ -227,22 +234,80 @@ const styles = StyleSheet.create({
   },
   scrollArea: {
     backgroundColor: 'white',
-    maxHeight: 230,
-    minHeight: 230,
-    maxWidth: 400,
+    minHeight: 210,
     minWidth: 400,
     borderWidth: 2,
     borderColor: 'purple',
     marginHorizontal: 6,
-    marginTop: -20,
+    marginVertical: 7,
   },
   txtBox: {
     marginTop: 2,
     color: 'grey',
     fontSize: 20,
-    marginBottom: 10,
-  },
-  bck: {
-    backgroundColor: "#180E3E",
+    //fontFamily: 'Serif',
   }
 });
+
+//////old stuff - keeping for reference
+
+//{getLogs(LogDisplay.day)}
+//<Button title='testdb' onPress={() => { console.log(getLogsv2('2023-03-08', calDatabase)) }}></Button>
+
+//old function for getting fake data
+function getLogs(day: string) {
+
+  const components = (String(day)).split('-');
+  const Y = components[0];
+  const M = components[1];
+  const D = components[2];
+  if (DATA[Y] && DATA[Y][M] && DATA[Y][M][D]) {
+    var ret = '  ';
+    const subDict = DATA[Y][M][D];
+    const subKeys = Object.keys(subDict);
+
+    for (let i = 0; i < subKeys.length; i++) {
+      const key = subKeys[i];
+      ret += key + ': ' + DATA[Y][M][D][key] + ' ' + getUnit(key) + '\n  ';
+    }
+    return (ret);
+  }
+  else {
+    return ("No data for the selected date");
+  }
+}
+// Dummy data set for testing display - year->month->day->substances
+type Substance = Record<string, number>; type Day = Record<string, Substance>;
+type Month = Record<string, Day>; type Year = Record<string, Month>;
+const DATA: Year = {
+  '2023': {
+    '01': { '05': { 'MDMA': 2 }, '06': { 'Alcohol': 12 } },
+    '02': {},
+    '03': {
+      '01': { 'Cannabis': 1 }, '02': { 'Cannabis': 2 }, '03': { 'Alcohol': 4, 'Cannabis': 1 },
+      '04': { 'Alcohol': 4, 'Xanax': 1 }, '05': { 'MDMA': 2 }, '06': { 'Alcohol': 12 }
+    },
+    '04': {},
+    '05': {},
+  },
+  '2024': {},
+};
+
+//i just never ended up using these 2 functions
+function getDatRef(s: string) {
+  const components = s.split('-');
+  const Y = components[0];
+  const M = components[1];
+  const D = components[2];
+  return '/' + Y + '/' + M + '/' + D;
+}
+function fixJSON(str: string) {
+  // Remove any backslashes
+  str = str.replace(/\\/g, '');
+  // Remove quotes around property names
+  str = str.replace(/"([^"]+)":/g, '$1:');
+  // Replace single quotes with double quotes
+  str = str.replace(/'/g, '"');
+  // Parse the string as JSON
+  return JSON.parse(str);//recall alter: go to ['_z']
+}
