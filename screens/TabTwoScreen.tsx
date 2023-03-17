@@ -33,7 +33,6 @@ export default function FuncScreen() {
   return (
     <View style={styles.root}>
       <View style={styles.separator}></View>
-      <Button title="test"></Button>
 
       <Text style={styles.cal}>Calendar</Text>
       <CAL {...CalProps}></CAL>
