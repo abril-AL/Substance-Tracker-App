@@ -218,8 +218,6 @@ export default function TrackScreen({
     }
   }
 
-  checkRec();//idk -_-
-
   return (
     <View style={styles.container}>
       <Stack fill center spacing={5} direction="column">
@@ -229,7 +227,6 @@ export default function TrackScreen({
           style={{ alignSelf: "flex-end", margin: 30 }}
           onPress={() => {
             submitData();
-            checkRec();
           }}
         ></Button>
       </Stack>
@@ -264,65 +261,3 @@ const styles = StyleSheet.create({
 });
 
 
-
-import { calReadData } from "./firebase";
-import { addSubstances } from "./TabTwoScreen";
-var plzwork = {};
-
-function checkRec() {
-  for (var i = 0; i < 10; i++) {
-    calReadData(MASTERID + '/').then((value) => {
-      var obj = (JSON.parse(value));
-      plzwork = obj;
-    });
-  }
-  let today = new Date(); var date = today.getDate(); var month = today.getMonth() + 1; var year = today.getFullYear(); var addzeroDate = '';
-  if (date < 10)
-    addzeroDate = '0';
-  var addZeroMonth = '';
-  if (month < 10)
-    addZeroMonth = '0';
-  let temp: Record<string, any> = plzwork;
-  if (year in temp) {
-    console.log(temp[year][addZeroMonth + month][addzeroDate + date]);
-    var stop = [];
-    const sub = (addSubstances(temp[year][addZeroMonth + month][addzeroDate + date]));
-    for (let key in sub) {
-      if (sub[key] && threshold[key] && sub[key] > threshold[key]) {
-        stop.push(key)
-      }
-    }
-    console.log(stop);
-    if ((stop.length) != 0) {
-      var ret = '';
-      for (let i = 0; i < stop.length; i++) {
-        if (i === 0) {
-          ret += stop[i];
-        } else {
-          ret += ", " + stop[i];
-        }
-      }
-      console.log(ret)
-      Alert.alert('Caution: The Following substances have intakes larger than the reccomended safe amout', ret)
-    }
-    console.log(stop);
-  }
-}
-
-const threshold: { [key: string]: number } = {
-  'Alcohol': 15,
-  'Adderal': 40,
-  'Benzos': 5,
-  'Cannabis': 1000,
-  'Cocaine': 95,
-  'Ketamine': 200,
-  'Kratom': 10,
-  'LSD': 50,
-  'MDMA': 150,
-  'Meth': 200,
-  'Nicotine': 1,
-  'Ibuprofen': 2,
-  'Percocet': 9,
-  'Psilocybin': 4,
-  'Steroid (Anabolic)': 100,
-};

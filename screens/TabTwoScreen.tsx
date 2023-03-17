@@ -1,4 +1,4 @@
-import { StyleSheet } from 'react-native';
+import { Alert, StyleSheet } from 'react-native';
 import { Text, View, ScrollView } from 'react-native';
 import React, { useState } from 'react';
 import { Calendar } from 'react-native-calendars';
@@ -7,13 +7,12 @@ import { MASTERID } from '../constants/userInfo';
 import { Button } from '@react-native-material/core';
 export var calDatabase = {};
 
-
-import { grabCurDay } from './firebase';
 //parent function
 export default function FuncScreen() {
+  const [giveAlert, setA] = useState(true);
   const [day, setDay] = useState(String(helper()));
   const userref = '/' + MASTERID + '/';
-
+  checkRec();
   var sessionDB = '';//string representation of DB
   //for some reason it needs to try to retrieve a few times, more reliable this way
   for (var i = 0; i < 15; i++) {
@@ -27,7 +26,17 @@ export default function FuncScreen() {
   const LogProps = { day };
   return (
     <View style={styles.bck}>
-      <Button title='test' onPress={() => grabCurDay()}></Button>
+      <Button title='Saftey/Control Recommendations' onPress={() => {
+        if (giveAlert) {
+          if (giveAlert && checkRec() != '') {
+            //console.log(checkRec)
+            Alert.alert("Please watch your intake of:", String(checkRec()))
+          } else {
+            setA(false)
+          }
+        }
+      }
+      }></Button>
       <View style={styles.separator}></View>
 
       <Text style={styles.cal}>Calendar</Text>
@@ -99,6 +108,7 @@ function helper() {
     addZeroMonth = '0';
   return (year + '-' + addZeroMonth + month + '-' + addzeroDate + date);
 }
+
 const units: { [key: string]: string } = {
   'Alcohol': 'oz',
   'Adderal': 'mg',
@@ -146,7 +156,7 @@ function getLogsv2(date: string, db: any) {
 }
 
 //these are all the helper functions for getLogsv2 - v2 just uses the firebase data entries instead of dummy data
-function getDaysLogs(dateString: string, dict_obj: Record<string, any>) {
+export function getDaysLogs(dateString: string, dict_obj: Record<string, any>) {
   const dateArray = dateString.split('-');
   let level: Record<string, any> = dict_obj;
 
@@ -250,3 +260,68 @@ const styles = StyleSheet.create({
     backgroundColor: "#180E3E",
   }
 });
+
+
+var plzwork = {};
+function checkRec() {
+  for (var i = 0; i < 10; i++) {
+    calReadData(MASTERID + '/').then((value) => {
+      var obj = (JSON.parse(value));
+      plzwork = obj;
+    });
+    console.log(plzwork)
+  }
+  let today = new Date(); var date = today.getDate(); var month = today.getMonth() + 1; var year = today.getFullYear(); var addzeroDate = '';
+  if (date < 10)
+    addzeroDate = '0';
+  var addZeroMonth = '';
+  if (month < 10)
+    addZeroMonth = '0';
+  let temp: Record<string, any> = plzwork;
+  console.log(temp);
+
+  if ("2023" in temp) {
+    console.log(temp[year][addZeroMonth + month][addzeroDate + date]);
+    var stop = [];
+    const sub = (addSubstances(temp[year][addZeroMonth + month][addzeroDate + date]));
+    console.log(sub);
+    for (let key in sub) {
+      if (sub[key] && threshold[key] && sub[key] > threshold[key]) {
+        stop.push(key)
+      }
+    }
+    console.log(stop);
+    if ((stop.length) != 0) {
+      var ret = '';
+      for (let i = 0; i < stop.length; i++) {
+        if (i === 0) {
+          ret += stop[i];
+        } else {
+          ret += ", " + stop[i];
+        }
+      }
+      console.log('ret:' + ret)
+      return ret;
+    }
+    console.log(stop);
+  }
+
+}
+
+const threshold: { [key: string]: number } = {
+  'Alcohol': 15,
+  'Adderal': 40,
+  'Benzos': 5,
+  'Cannabis': 1000,
+  'Cocaine': 95,
+  'Ketamine': 200,
+  'Kratom': 10,
+  'LSD': 50,
+  'MDMA': 150,
+  'Meth': 200,
+  'Nicotine': 1,
+  'Ibuprofen': 2,
+  'Percocet': 9,
+  'Psilocybin': 4,
+  'Steroid (Anabolic)': 100,
+};
