@@ -53,7 +53,11 @@ npx expo start
     - click the link and allow the js to download
     - also note that the app is built for lightmode on ios
 
-- TODO: add mac instructions, emulator, etc
+- If on Mac, 
+    - make sure you have Xcode installed 
+    - set your desired device as the default emulator 
+    - after running 'npm start' in the terminal, press 'i' to run the app on the emulator on your local device.
+    - Expo Go can also be used 
 
 ## Using the application
 - The user will first be presented with an authentification screen, there is the option to sign up with a new account, or sign into an existing account
