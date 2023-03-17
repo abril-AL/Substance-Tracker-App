@@ -64,7 +64,7 @@ export async function calReadData(userRef: string) {
 
 export async function getExistingUsers() {
   try {
-    const snapshot = await get(ref(database, '/Users'));
+    const snapshot = await get(ref(database, "/Users"));
     if (snapshot.exists()) {
       return await Promise.resolve(JSON.stringify(snapshot.val()));
       return JSON.stringify(snapshot.val());
@@ -84,7 +84,7 @@ export async function addUser(un: string, pw: string) {
   const obj: Record<string, string> = {};
   obj[un] = pw;
   //console.log(obj);
-  update(ref(db, '/Users'), obj);
+  update(ref(db, "/Users"), obj);
 }
 
 

@@ -29,6 +29,7 @@ export function AuthScreen(authProps: any) {
                     <TextInput
                         onChangeText={(text) => setUN(text)}
                         leading={props => <Icon name="account" {...props}
+                        autoCapitalize = 'none'
                         />}
                     />
                     <Text>Password</Text>
