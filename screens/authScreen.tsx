@@ -148,9 +148,10 @@ function authSignUp(un: string, pw: string, err: React.Dispatch<React.SetStateAc
     }
     else {
         setM(un);
-        console.log('ehrm');
+        //console.log('ehrm');
         addUser(un, pw);
-        return false;
+        err('Account Successfully Creates, Please Sign in Through the Sign in Page')
+        return true;
     }
     err('wut the... how ??');
     return false;

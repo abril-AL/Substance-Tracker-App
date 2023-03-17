@@ -47,14 +47,14 @@ export function writeData(table: string, key_data: Object) {
 //specific to calender - gets string rep of JSON database
 export async function calReadData(userRef: string) {
   const data = ref(database, userRef);
-  console.log(userRef)
+  //console.log(userRef)
   try {
     const snapshot = await get(data);
     if (snapshot.exists()) {
       return await Promise.resolve(JSON.stringify(snapshot.val()));
       return JSON.stringify(snapshot.val());
     } else {
-      console.log("No data available");
+      //console.log("No data available");
     }
   } catch (error) {
     console.error(error);
@@ -85,4 +85,35 @@ export async function addUser(un: string, pw: string) {
   obj[un] = pw;
   //console.log(obj);
   update(ref(db, '/Users'), obj);
+}
+
+
+import { MASTERID } from "../constants/userInfo";
+const test = grabCurDay();
+
+
+
+export async function grabCurDay() {
+  let today = new Date();
+  var date = today.getDate();
+  var month = today.getMonth() + 1;
+  var year = today.getFullYear();
+  var addzeroDate = '';
+  if (date < 10)
+    addzeroDate = '0';
+  var addZeroMonth = '';
+  if (month < 10)
+    addZeroMonth = '0';
+  const d_ref = ('/' + year + '/' + addZeroMonth + month + '/' + addzeroDate + date);
+  const snapshot = await get(ref(database, '/' + MASTERID + d_ref));
+  if (snapshot.exists()) {
+    for (var i = 0; i < 15; i++) {
+      const ret = await Promise.resolve(JSON.stringify(snapshot.val()));
+      console.log(ret);
+      return ret;
+    }
+  } else {
+    console.log("No data available");
+    return null;
+  }
 }
