@@ -32,7 +32,8 @@ export default function FuncScreen() {
             //console.log(checkRec)
             Alert.alert("Please watch your intake of:", String(checkRec()))
           } else {
-            setA(false)
+            Alert.alert("Current intakes meet reccomended guidelines", String(checkRec()))
+            //setA(false)
           }
         }
       }
@@ -304,15 +305,16 @@ function checkRec() {
       return ret;
     }
     console.log(stop);
+    return '';
   }
-
+  return '';
 }
 
 const threshold: { [key: string]: number } = {
   'Alcohol': 15,
   'Adderal': 40,
   'Benzos': 5,
-  'Cannabis': 1000,
+  'Cannabis': 1000,//idk how much is too much
   'Cocaine': 95,
   'Ketamine': 200,
   'Kratom': 10,
