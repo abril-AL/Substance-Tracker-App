@@ -1,11 +1,12 @@
 import { StyleSheet, ScrollView } from "react-native";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { View } from "../components/Themed";
-import { Stack, Button } from "@react-native-material/core";
+import { Stack, Button, Flex, Box } from "@react-native-material/core";
 import { RootTabScreenProps } from "../types";
 import { TrackButton } from "../components/TrackButton";
-import { writeData } from "./firebase";
+import { readData, writeData } from "./firebase";
 import { MASTERID } from "../constants/userInfo";
+import { LinkingOptions, useLinkTo } from "@react-navigation/native";
 
 export default function TrackScreen({
   navigation,
@@ -165,17 +166,40 @@ export default function TrackScreen({
     },
   ];
 
+  const [prefs, setPrefs] = useState(["Alcohol", "Cannabis"]);
+
+  const readPrefs = async () => {
+    const data = await readData("/" + MASTERID + "/substancePrefs");
+    return data;
+  };
+
+  // populate the prefs array with user's desired substance
+  useEffect(() => {
+    readPrefs().then((data) => {
+      const arr = [];
+      for (const name in data) {
+        if (data[name] == true) {
+          arr.push(name);
+        }
+      }
+      setPrefs(arr);
+    });
+  }, []);
+
+  // populate trackButtons array with button preferences stored in database
   const trackButtons: any = [];
   for (const item in data) {
-    trackButtons.push(
-      <TrackButton
-        substance={data[item].Name}
-        unit={data[item].Unit}
-        step={data[item].Step}
-        getValue={data[item].Count}
-        setValue={data[item].SetCount}
-      ></TrackButton>
-    );
+    if (prefs.includes(data[item].Name)) {
+      trackButtons.push(
+        <TrackButton
+          substance={data[item].Name}
+          unit={data[item].Unit}
+          step={data[item].Step}
+          getValue={data[item].Count}
+          setValue={data[item].SetCount}
+        ></TrackButton>
+      );
+    }
   }
 
   // when submit button is pressed this function is called, which writes the count of each drug to the database (if
@@ -222,13 +246,22 @@ export default function TrackScreen({
     <View style={styles.container}>
       <Stack fill center spacing={5} direction="column">
         <ScrollView style={styles.scrollArea}>{trackButtons}</ScrollView>
-        <Button
-          title="submit"
-          style={{ alignSelf: "flex-end", margin: 30 }}
-          onPress={() => {
-            submitData();
-          }}
-        ></Button>
+        <Stack direction="row" spacing={100} style={styles.bottomArea}>
+          <Box>
+            <Button
+              title="Customise"
+              onPress={() => navigation.navigate("Customise")}
+            ></Button>
+          </Box>
+          <Box>
+            <Button
+              title="submit"
+              onPress={() => {
+                submitData();
+              }}
+            ></Button>
+          </Box>
+        </Stack>
       </Stack>
     </View>
   );
@@ -257,5 +290,8 @@ const styles = StyleSheet.create({
     borderColor: "transparent",
     marginHorizontal: 6,
     marginVertical: 7,
+  },
+  bottomArea: {
+    marginBottom: 50,
   },
 });

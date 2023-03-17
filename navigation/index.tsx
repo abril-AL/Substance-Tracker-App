@@ -22,6 +22,7 @@ import TrackScreen from "../screens/TrackScreen";
 import TabTwoScreen from "../screens/TabTwoScreen";
 import SearchScreen from "../screens/SearchScreen";
 import AnalysisScreen from "../screens/AnalysisScreen";
+import CustomiseScreen from "../screens/CustomiseScreen";
 import {
   RootStackParamList,
   RootTabParamList,
@@ -63,6 +64,7 @@ function RootNavigator() {
         component={NotFoundScreen}
         options={{ title: "Oops!" }}
       />
+      <Stack.Screen name="Customise" component={CustomiseScreen} />
       <Stack.Group screenOptions={{ presentation: "modal" }}>
         <Stack.Screen name="Modal" component={ModalScreen} />
       </Stack.Group>
