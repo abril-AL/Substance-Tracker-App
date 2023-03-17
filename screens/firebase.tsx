@@ -92,7 +92,6 @@ import { MASTERID } from "../constants/userInfo";
 const test = grabCurDay();
 
 
-
 export async function grabCurDay() {
   let today = new Date();
   var date = today.getDate();
@@ -116,4 +115,5 @@ export async function grabCurDay() {
     console.log("No data available");
     return null;
   }
+  return null;
 }

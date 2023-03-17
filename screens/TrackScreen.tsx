@@ -4,9 +4,9 @@ import { View } from "../components/Themed";
 import { Stack, Button } from "@react-native-material/core";
 import { RootTabScreenProps } from "../types";
 import { TrackButton } from "../components/TrackButton";
-import { writeData } from "./firebase";
+import { grabCurDay, writeData } from "./firebase";
 import { MASTERID } from "../constants/userInfo";
-
+import { Alert } from 'react-native'
 export default function TrackScreen({
   navigation,
 }: RootTabScreenProps<"Track">) {
@@ -195,28 +195,30 @@ export default function TrackScreen({
         }
         writeData(
           MASTERID +
-            "/" +
-            today.getFullYear() +
-            "/" +
-            add_zero_month +
-            (today.getMonth() + 1) +
-            "/" +
-            add_zero_day +
-            today.getDate() +
-            "/" +
-            today.getHours() +
-            ":" +
-            today.getMinutes() +
-            ":" +
-            today.getSeconds() +
-            "/" +
-            data[item].Name,
+          "/" +
+          today.getFullYear() +
+          "/" +
+          add_zero_month +
+          (today.getMonth() + 1) +
+          "/" +
+          add_zero_day +
+          today.getDate() +
+          "/" +
+          today.getHours() +
+          ":" +
+          today.getMinutes() +
+          ":" +
+          today.getSeconds() +
+          "/" +
+          data[item].Name,
           Math.round(data[item].Count * 10) / 10
         );
         data[item].SetCount(-data[item].Count);
       }
     }
   }
+
+  checkRec();//idk -_-
 
   return (
     <View style={styles.container}>
@@ -227,6 +229,7 @@ export default function TrackScreen({
           style={{ alignSelf: "flex-end", margin: 30 }}
           onPress={() => {
             submitData();
+            checkRec();
           }}
         ></Button>
       </Stack>
@@ -259,3 +262,67 @@ const styles = StyleSheet.create({
     marginVertical: 7,
   },
 });
+
+
+
+import { calReadData } from "./firebase";
+import { addSubstances } from "./TabTwoScreen";
+var plzwork = {};
+
+function checkRec() {
+  for (var i = 0; i < 10; i++) {
+    calReadData(MASTERID + '/').then((value) => {
+      var obj = (JSON.parse(value));
+      plzwork = obj;
+    });
+  }
+  let today = new Date(); var date = today.getDate(); var month = today.getMonth() + 1; var year = today.getFullYear(); var addzeroDate = '';
+  if (date < 10)
+    addzeroDate = '0';
+  var addZeroMonth = '';
+  if (month < 10)
+    addZeroMonth = '0';
+  let temp: Record<string, any> = plzwork;
+  if (year in temp) {
+    console.log(temp[year][addZeroMonth + month][addzeroDate + date]);
+    var stop = [];
+    const sub = (addSubstances(temp[year][addZeroMonth + month][addzeroDate + date]));
+    for (let key in sub) {
+      if (sub[key] && threshold[key] && sub[key] > threshold[key]) {
+        stop.push(key)
+      }
+    }
+    console.log(stop);
+    if ((stop.length) != 0) {
+      var ret = '';
+      for (let i = 0; i < stop.length; i++) {
+        if (i === 0) {
+          ret += stop[i];
+        } else {
+          ret += ", " + stop[i];
+        }
+      }
+      console.log(ret)
+      Alert.alert('Caution: The Following substances have intakes larger than the reccomended safe amout', ret)
+    }
+    console.log(stop);
+  }
+}
+
+const threshold: { [key: string]: number } = {
+  'Alcohol': 15,
+  'Adderal': 40,
+  'Benzos': 5,
+  'Cannabis': 1000,
+  'Cocaine': 95,
+  'Ketamine': 200,
+  'Kratom': 10,
+  'LSD': 50,
+  'MDMA': 150,
+  'Meth': 200,
+  'Nicotine': 1,
+  'Ibuprofen': 2,
+  'Percocet': 9,
+  'Psilocybin': 4,
+  'Steroid (Anabolic)': 100,
+};

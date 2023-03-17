@@ -4,8 +4,11 @@ import React, { useState } from 'react';
 import { Calendar } from 'react-native-calendars';
 import { calReadData } from './firebase'
 import { MASTERID } from '../constants/userInfo';
-var calDatabase = {};
+import { Button } from '@react-native-material/core';
+export var calDatabase = {};
 
+
+import { grabCurDay } from './firebase';
 //parent function
 export default function FuncScreen() {
   const [day, setDay] = useState(String(helper()));
@@ -24,6 +27,7 @@ export default function FuncScreen() {
   const LogProps = { day };
   return (
     <View style={styles.bck}>
+      <Button title='test' onPress={() => grabCurDay()}></Button>
       <View style={styles.separator}></View>
 
       <Text style={styles.cal}>Calendar</Text>
@@ -110,7 +114,7 @@ const units: { [key: string]: string } = {
   'Ibuprofen': 'g',
   'Percocet': 'mg',
   'Psilocybin': 'g',
-  'Steroid (Anabolic': 'mg',
+  'Steroid (Anabolic)': 'mg',
 };
 function getUnit(s: string): string {
   if (units[s]) {
@@ -156,7 +160,7 @@ function getDaysLogs(dateString: string, dict_obj: Record<string, any>) {
   }
   return level;
 }
-function addSubstances(dict: Record<string, Record<string, string>>) {
+export function addSubstances(dict: Record<string, Record<string, string>>) {
   const totals: Record<string, number> = {};
   if (dict == null) {
     return {};
@@ -174,7 +178,7 @@ function addSubstances(dict: Record<string, Record<string, string>>) {
   }
   return totals;
 }
-function getSumStr(sub_dict: any) {
+export function getSumStr(sub_dict: any) {
   if (sub_dict != null) {
     var ret = '';
     const subKeys = Object.keys(sub_dict);
