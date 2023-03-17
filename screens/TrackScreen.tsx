@@ -223,6 +223,7 @@ export default function TrackScreen({
       <Stack fill center spacing={5} direction="column">
         <ScrollView style={styles.scrollArea}>{trackButtons}</ScrollView>
         <Button
+          color="#92EBE9"
           title="submit"
           style={{ alignSelf: "flex-end", margin: 30 }}
           onPress={() => {
@@ -236,6 +237,7 @@ export default function TrackScreen({
 
 const styles = StyleSheet.create({
   container: {
+    backgroundColor: "#180E3E",
     flex: 1,
     alignItems: "center",
     justifyContent: "center",
@@ -250,7 +252,7 @@ const styles = StyleSheet.create({
     width: "80%",
   },
   scrollArea: {
-    backgroundColor: "white",
+    backgroundColor: "#180E3E",
     minHeight: 210,
     minWidth: 400,
     borderWidth: 2,
