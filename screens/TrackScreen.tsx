@@ -4,9 +4,9 @@ import { View } from "../components/Themed";
 import { Stack, Button } from "@react-native-material/core";
 import { RootTabScreenProps } from "../types";
 import { TrackButton } from "../components/TrackButton";
-import { writeData } from "./firebase";
+import { grabCurDay, writeData } from "./firebase";
 import { MASTERID } from "../constants/userInfo";
-
+import { Alert } from 'react-native'
 export default function TrackScreen({
   navigation,
 }: RootTabScreenProps<"Track">) {
@@ -195,22 +195,22 @@ export default function TrackScreen({
         }
         writeData(
           MASTERID +
-            "/" +
-            today.getFullYear() +
-            "/" +
-            add_zero_month +
-            (today.getMonth() + 1) +
-            "/" +
-            add_zero_day +
-            today.getDate() +
-            "/" +
-            today.getHours() +
-            ":" +
-            today.getMinutes() +
-            ":" +
-            today.getSeconds() +
-            "/" +
-            data[item].Name,
+          "/" +
+          today.getFullYear() +
+          "/" +
+          add_zero_month +
+          (today.getMonth() + 1) +
+          "/" +
+          add_zero_day +
+          today.getDate() +
+          "/" +
+          today.getHours() +
+          ":" +
+          today.getMinutes() +
+          ":" +
+          today.getSeconds() +
+          "/" +
+          data[item].Name,
           Math.round(data[item].Count * 10) / 10
         );
         data[item].SetCount(-data[item].Count);
@@ -261,3 +261,5 @@ const styles = StyleSheet.create({
     marginVertical: 7,
   },
 });
+
+
