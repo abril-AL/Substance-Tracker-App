@@ -87,7 +87,6 @@ function helper() {
   var date = new Date().getDate();
   var month = new Date().getMonth() + 1;
   var year = new Date().getFullYear();
-  console.log(date);
   var addzeroDate = '';
   if (date < 10)
     addzeroDate = '0';
